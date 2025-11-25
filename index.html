@@ -627,12 +627,12 @@
     </div>
 
     <div class="reserve-panel p1" id="reserve-p1">
-      <div class="reserve-label">Player 1</div>
+      <div class="reserve-label">Player 1 (Blue)</div>
       <div class="reserve-pieces" id="reserve-pieces-p1"></div>
     </div>
 
     <div class="reserve-panel p2" id="reserve-p2">
-      <div class="reserve-label">Player 2</div>
+      <div class="reserve-label">Player 2 (Green)</div>
       <div class="reserve-pieces" id="reserve-pieces-p2"></div>
     </div>
 
@@ -745,7 +745,9 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
-    // ====== TRON風サウンドエンジン ======
+    // ====================================
+    // TRON風サウンドエンジン
+    // ====================================
     let audioContext = null;
     let soundEnabled = true;
 
@@ -759,7 +761,6 @@
       }
     }
 
-    // クリック時にオーディオを初期化（ユーザー操作が必要）
     document.addEventListener('click', () => {
       if (!audioContext) initAudio();
       if (audioContext && audioContext.state === 'suspended') {
@@ -767,156 +768,123 @@
       }
     }, { once: true });
 
-    // TRON風シンセサウンド生成
     function playSound(type) {
       if (!audioContext || !soundEnabled) return;
 
-      const now = audioContext.currentTime;
-
       switch (type) {
-        case 'select': // 駒選択時 - 高音のピッ
+        case 'select':
           playSynthTone(880, 0.08, 'sine', 0.3, 0.02);
           playSynthTone(1320, 0.06, 'sine', 0.2, 0.04);
           break;
-
-        case 'place': // 駒配置時 - 重厚な着地音
+        case 'place':
           playSynthTone(220, 0.15, 'triangle', 0.4, 0);
           playSynthTone(110, 0.2, 'sawtooth', 0.2, 0.05);
           playNoise(0.1, 0.15);
           break;
-
-        case 'move': // 駒移動時 - スウィープ音
+        case 'move':
           playSweep(400, 800, 0.3, 'sine', 0.25);
           break;
-
-        case 'gobble': // かぶせ時 - 攻撃的な音
+        case 'gobble':
           playSynthTone(150, 0.1, 'sawtooth', 0.4, 0);
           playSynthTone(300, 0.15, 'square', 0.3, 0.05);
           playSynthTone(100, 0.2, 'triangle', 0.3, 0.1);
           playNoise(0.15, 0.1);
           break;
-
-        case 'error': // エラー時 - 不協和音
+        case 'error':
           playSynthTone(200, 0.15, 'sawtooth', 0.3, 0);
           playSynthTone(210, 0.15, 'sawtooth', 0.3, 0.02);
           break;
-
-        case 'win': // 勝利時 - ファンファーレ
+        case 'win':
           playSynthTone(523, 0.2, 'sine', 0.4, 0);
           playSynthTone(659, 0.2, 'sine', 0.4, 0.15);
           playSynthTone(784, 0.2, 'sine', 0.4, 0.3);
           playSynthTone(1047, 0.4, 'sine', 0.5, 0.45);
           playSweep(200, 1200, 0.8, 'sine', 0.15);
           break;
-
-        case 'turn': // ターン切替 - 軽い電子音
+        case 'turn':
           playSynthTone(660, 0.05, 'sine', 0.2, 0);
           playSynthTone(880, 0.05, 'sine', 0.15, 0.03);
           break;
-
-        case 'start': // ゲーム開始 - 起動音
+        case 'start':
           playSweep(100, 600, 0.4, 'sawtooth', 0.3);
           playSynthTone(440, 0.15, 'sine', 0.3, 0.2);
           playSynthTone(550, 0.15, 'sine', 0.3, 0.3);
           playSynthTone(660, 0.2, 'sine', 0.35, 0.4);
-          break;
-
-        case 'hover': // ホバー時 - 微かなビープ
-          playSynthTone(1200, 0.03, 'sine', 0.1, 0);
           break;
       }
     }
 
     function playSynthTone(freq, duration, waveform, volume, delay) {
       if (!audioContext) return;
-
       const osc = audioContext.createOscillator();
       const gain = audioContext.createGain();
       const filter = audioContext.createBiquadFilter();
-
       osc.type = waveform;
       osc.frequency.value = freq;
-
       filter.type = 'lowpass';
       filter.frequency.value = 3000;
       filter.Q.value = 1;
-
       const now = audioContext.currentTime + delay;
       gain.gain.setValueAtTime(0, now);
       gain.gain.linearRampToValueAtTime(volume * 0.3, now + 0.01);
       gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
       osc.connect(filter);
       filter.connect(gain);
       gain.connect(audioContext.destination);
-
       osc.start(now);
       osc.stop(now + duration + 0.1);
     }
 
     function playSweep(startFreq, endFreq, duration, waveform, volume) {
       if (!audioContext) return;
-
       const osc = audioContext.createOscillator();
       const gain = audioContext.createGain();
-
       osc.type = waveform;
       const now = audioContext.currentTime;
       osc.frequency.setValueAtTime(startFreq, now);
       osc.frequency.exponentialRampToValueAtTime(endFreq, now + duration);
-
       gain.gain.setValueAtTime(volume * 0.3, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
       osc.connect(gain);
       gain.connect(audioContext.destination);
-
       osc.start(now);
       osc.stop(now + duration + 0.1);
     }
 
     function playNoise(duration, volume) {
       if (!audioContext) return;
-
       const bufferSize = audioContext.sampleRate * duration;
       const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
       const data = buffer.getChannelData(0);
-
       for (let i = 0; i < bufferSize; i++) {
         data[i] = (Math.random() * 2 - 1) * 0.5;
       }
-
       const noise = audioContext.createBufferSource();
       noise.buffer = buffer;
-
       const gain = audioContext.createGain();
       const filter = audioContext.createBiquadFilter();
-
       filter.type = 'bandpass';
       filter.frequency.value = 1000;
       filter.Q.value = 0.5;
-
       const now = audioContext.currentTime;
       gain.gain.setValueAtTime(volume * 0.2, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
       noise.connect(filter);
       filter.connect(gain);
       gain.connect(audioContext.destination);
-
       noise.start(now);
       noise.stop(now + duration);
     }
 
-    // ====== Three.js 3D Setup ======
-    let scene, camera, renderer, controls;
+    // ====================================
+    // Three.js 3D Setup
+    // ====================================
+    let scene, camera, renderer;
     let boardGroup, cellMeshes = [], pieceMeshes = {};
     let particleSystem, glowLights = [];
     let raycaster, mouse;
-    let animationMixer;
     let clock = new THREE.Clock();
 
-    // Colors
     const COLORS = {
       p1: 0x00eaff,
       p2: 0x4aff00,
@@ -929,17 +897,11 @@
 
     function init3D() {
       const canvas = document.getElementById('game-canvas');
-
-      // Scene
       scene = new THREE.Scene();
       scene.fog = new THREE.FogExp2(0x000510, 0.02);
-
-      // Camera
       camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
       camera.position.set(0, 8, 10);
       camera.lookAt(0, 0, 0);
-
-      // Renderer
       renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -947,55 +909,34 @@
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.2;
-
-      // Raycaster
       raycaster = new THREE.Raycaster();
       mouse = new THREE.Vector2();
-
-      // Lights
       setupLights();
-
-      // Board
       createBoard();
-
-      // Particles
       createParticles();
-
-      // Events
       window.addEventListener('resize', onWindowResize);
       canvas.addEventListener('mousemove', onMouseMove);
       canvas.addEventListener('click', onClick3D);
-
-      // Animation loop
       animate();
     }
 
     function setupLights() {
-      // Ambient
       const ambient = new THREE.AmbientLight(0x101520, 0.5);
       scene.add(ambient);
-
-      // Main directional light
       const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
       dirLight.position.set(5, 10, 5);
       dirLight.castShadow = true;
       dirLight.shadow.mapSize.width = 2048;
       dirLight.shadow.mapSize.height = 2048;
       scene.add(dirLight);
-
-      // Neon blue point light
       const blueLight = new THREE.PointLight(COLORS.p1, 1, 20);
       blueLight.position.set(-5, 5, -5);
       scene.add(blueLight);
       glowLights.push(blueLight);
-
-      // Neon green point light
       const greenLight = new THREE.PointLight(COLORS.p2, 1, 20);
       greenLight.position.set(5, 5, 5);
       scene.add(greenLight);
       glowLights.push(greenLight);
-
-      // Bottom rim light
       const rimLight = new THREE.PointLight(0xbf00ff, 0.5, 15);
       rimLight.position.set(0, -3, 0);
       scene.add(rimLight);
@@ -1004,53 +945,32 @@
     function createBoard() {
       boardGroup = new THREE.Group();
       scene.add(boardGroup);
-
-      // Board base
       const baseGeom = new THREE.BoxGeometry(8, 0.5, 8);
       const baseMat = new THREE.MeshStandardMaterial({
-        color: COLORS.board,
-        metalness: 0.8,
-        roughness: 0.2,
-        transparent: true,
-        opacity: 0.9
+        color: COLORS.board, metalness: 0.8, roughness: 0.2, transparent: true, opacity: 0.9
       });
       const baseMesh = new THREE.Mesh(baseGeom, baseMat);
       baseMesh.position.y = -0.3;
       baseMesh.receiveShadow = true;
       boardGroup.add(baseMesh);
 
-      // Grid lines
-      const gridMat = new THREE.LineBasicMaterial({
-        color: COLORS.grid,
-        transparent: true,
-        opacity: 0.6
-      });
-
+      const gridMat = new THREE.LineBasicMaterial({ color: COLORS.grid, transparent: true, opacity: 0.6 });
       for (let i = 0; i <= 3; i++) {
         const pos = -3 + i * 2;
-
-        // Horizontal
         const hPoints = [new THREE.Vector3(-3, 0.01, pos), new THREE.Vector3(3, 0.01, pos)];
         const hGeom = new THREE.BufferGeometry().setFromPoints(hPoints);
         boardGroup.add(new THREE.Line(hGeom, gridMat));
-
-        // Vertical
         const vPoints = [new THREE.Vector3(pos, 0.01, -3), new THREE.Vector3(pos, 0.01, 3)];
         const vGeom = new THREE.BufferGeometry().setFromPoints(vPoints);
         boardGroup.add(new THREE.Line(vGeom, gridMat));
       }
 
-      // Interactive cells
       cellMeshes = [];
       for (let r = 0; r < 3; r++) {
         for (let c = 0; c < 3; c++) {
           const cellGeom = new THREE.PlaneGeometry(1.9, 1.9);
           const cellMat = new THREE.MeshStandardMaterial({
-            color: COLORS.cell,
-            metalness: 0.5,
-            roughness: 0.5,
-            transparent: true,
-            opacity: 0.3
+            color: COLORS.cell, metalness: 0.5, roughness: 0.5, transparent: true, opacity: 0.3
           });
           const cellMesh = new THREE.Mesh(cellGeom, cellMat);
           cellMesh.rotation.x = -Math.PI / 2;
@@ -1066,32 +986,21 @@
       const particleCount = 500;
       const positions = new Float32Array(particleCount * 3);
       const colors = new Float32Array(particleCount * 3);
-
       for (let i = 0; i < particleCount; i++) {
         positions[i * 3] = (Math.random() - 0.5) * 30;
         positions[i * 3 + 1] = (Math.random() - 0.5) * 20;
         positions[i * 3 + 2] = (Math.random() - 0.5) * 30;
-
-        const color = Math.random() > 0.5 ?
-          new THREE.Color(COLORS.p1) :
-          new THREE.Color(COLORS.p2);
+        const color = Math.random() > 0.5 ? new THREE.Color(COLORS.p1) : new THREE.Color(COLORS.p2);
         colors[i * 3] = color.r;
         colors[i * 3 + 1] = color.g;
         colors[i * 3 + 2] = color.b;
       }
-
       const particleGeom = new THREE.BufferGeometry();
       particleGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
       particleGeom.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
       const particleMat = new THREE.PointsMaterial({
-        size: 0.05,
-        vertexColors: true,
-        transparent: true,
-        opacity: 0.6,
-        blending: THREE.AdditiveBlending
+        size: 0.05, vertexColors: true, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending
       });
-
       particleSystem = new THREE.Points(particleGeom, particleMat);
       scene.add(particleSystem);
     }
@@ -1099,88 +1008,57 @@
     function createPieceMesh(pieceId, owner, size) {
       const sizeMap = { large: 0.7, medium: 0.5, small: 0.35 };
       const radius = sizeMap[size];
-      const height = radius * 1.2;
-
-      // Main sphere (slightly flattened)
       const geom = new THREE.SphereGeometry(radius, 32, 24);
       geom.scale(1, 0.7, 1);
-
-      const color = owner === 'P1' ? COLORS.p1 : COLORS.p2;
+      const color = owner === 1 ? COLORS.p1 : COLORS.p2;
       const mat = new THREE.MeshStandardMaterial({
-        color: color,
-        metalness: 0.4,
-        roughness: 0.3,
-        emissive: color,
-        emissiveIntensity: 0.3
+        color: color, metalness: 0.4, roughness: 0.3, emissive: color, emissiveIntensity: 0.3
       });
-
       const mesh = new THREE.Mesh(geom, mat);
       mesh.castShadow = true;
       mesh.userData = { pieceId, owner, size };
-
-      // Glow ring
       const ringGeom = new THREE.TorusGeometry(radius * 0.9, 0.03, 16, 32);
-      const ringMat = new THREE.MeshBasicMaterial({
-        color: color,
-        transparent: true,
-        opacity: 0.6
-      });
+      const ringMat = new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 0.6 });
       const ring = new THREE.Mesh(ringGeom, ringMat);
       ring.rotation.x = Math.PI / 2;
       ring.position.y = -radius * 0.3;
       mesh.add(ring);
-
-      // Inner highlight
       const innerGeom = new THREE.SphereGeometry(radius * 0.3, 16, 16);
-      const innerMat = new THREE.MeshBasicMaterial({
-        color: 0xffffff,
-        transparent: true,
-        opacity: 0.3
-      });
+      const innerMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.3 });
       const inner = new THREE.Mesh(innerGeom, innerMat);
       inner.position.set(-radius * 0.2, radius * 0.2, radius * 0.3);
       mesh.add(inner);
-
       return mesh;
     }
 
     function placePiece3D(pieceId, row, col, animate = true) {
-      const piece = pieces[pieceId];
+      const piece = gameState.pieces[pieceId];
       let mesh = pieceMeshes[pieceId];
-
       if (!mesh) {
         mesh = createPieceMesh(pieceId, piece.owner, piece.size);
         pieceMeshes[pieceId] = mesh;
         scene.add(mesh);
       }
-
       const targetX = -2 + col * 2;
       const targetZ = -2 + row * 2;
-      const stack = board[row][col];
+      const stack = gameState.board[row][col];
       const stackIndex = stack.indexOf(pieceId);
       const targetY = 0.3 + stackIndex * 0.2;
-
       if (animate) {
-        // Animate piece placement
         const startY = 5;
         mesh.position.set(targetX, startY, targetZ);
         mesh.scale.set(0.1, 0.1, 0.1);
-
         const duration = 500;
         const startTime = Date.now();
-
         function animateDrop() {
           const elapsed = Date.now() - startTime;
           const progress = Math.min(elapsed / duration, 1);
-          const eased = 1 - Math.pow(1 - progress, 3); // Ease out cubic
-
+          const eased = 1 - Math.pow(1 - progress, 3);
           mesh.position.y = startY + (targetY - startY) * eased;
           mesh.scale.setScalar(0.1 + 0.9 * eased);
-
           if (progress < 1) {
             requestAnimationFrame(animateDrop);
           } else {
-            // Landing effect
             createLandingParticles(targetX, targetY, targetZ, piece.owner);
           }
         }
@@ -1188,42 +1066,30 @@
       } else {
         mesh.position.set(targetX, targetY, targetZ);
       }
-
       mesh.visible = true;
     }
 
     function movePiece3D(pieceId, fromRow, fromCol, toRow, toCol) {
       const mesh = pieceMeshes[pieceId];
       if (!mesh) return;
-
-      const piece = pieces[pieceId];
+      const piece = gameState.pieces[pieceId];
       const targetX = -2 + toCol * 2;
       const targetZ = -2 + toRow * 2;
-      const stack = board[toRow][toCol];
+      const stack = gameState.board[toRow][toCol];
       const stackIndex = stack.indexOf(pieceId);
       const targetY = 0.3 + stackIndex * 0.2;
-
-      // Arc animation
       const startPos = mesh.position.clone();
       const duration = 600;
       const startTime = Date.now();
       const arcHeight = 2;
-
       function animateMove() {
         const elapsed = Date.now() - startTime;
         const progress = Math.min(elapsed / duration, 1);
-        const eased = progress < 0.5 ?
-          2 * progress * progress :
-          1 - Math.pow(-2 * progress + 2, 2) / 2;
-
+        const eased = progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2;
         mesh.position.x = startPos.x + (targetX - startPos.x) * eased;
         mesh.position.z = startPos.z + (targetZ - startPos.z) * eased;
-        mesh.position.y = startPos.y + (targetY - startPos.y) * eased +
-          Math.sin(progress * Math.PI) * arcHeight;
-
-        // Rotation during move
+        mesh.position.y = startPos.y + (targetY - startPos.y) * eased + Math.sin(progress * Math.PI) * arcHeight;
         mesh.rotation.y = progress * Math.PI * 2;
-
         if (progress < 1) {
           requestAnimationFrame(animateMove);
         } else {
@@ -1235,43 +1101,26 @@
     }
 
     function createLandingParticles(x, y, z, owner) {
-      const color = owner === 'P1' ? COLORS.p1 : COLORS.p2;
+      const color = owner === 1 ? COLORS.p1 : COLORS.p2;
       const particleCount = 20;
-
       for (let i = 0; i < particleCount; i++) {
         const geom = new THREE.SphereGeometry(0.05, 8, 8);
-        const mat = new THREE.MeshBasicMaterial({
-          color: color,
-          transparent: true,
-          opacity: 1
-        });
+        const mat = new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 1 });
         const particle = new THREE.Mesh(geom, mat);
         particle.position.set(x, y, z);
-
         const angle = (i / particleCount) * Math.PI * 2;
-        const velocity = {
-          x: Math.cos(angle) * 0.1,
-          y: Math.random() * 0.1 + 0.05,
-          z: Math.sin(angle) * 0.1
-        };
-
+        const velocity = { x: Math.cos(angle) * 0.1, y: Math.random() * 0.1 + 0.05, z: Math.sin(angle) * 0.1 };
         scene.add(particle);
-
         const startTime = Date.now();
         function animateParticle() {
           const elapsed = Date.now() - startTime;
-          if (elapsed > 500) {
-            scene.remove(particle);
-            return;
-          }
-
+          if (elapsed > 500) { scene.remove(particle); return; }
           const progress = elapsed / 500;
           particle.position.x += velocity.x;
           particle.position.y += velocity.y - progress * 0.02;
           particle.position.z += velocity.z;
           particle.material.opacity = 1 - progress;
           particle.scale.setScalar(1 - progress * 0.5);
-
           requestAnimationFrame(animateParticle);
         }
         animateParticle();
@@ -1279,21 +1128,12 @@
     }
 
     function highlightWinningLine3D(line, owner) {
-      const color = owner === 'P1' ? COLORS.p1 : COLORS.p2;
-
-      // Create glowing line
       const points = line.map(([r, c]) => new THREE.Vector3(-2 + c * 2, 0.5, -2 + r * 2));
       const lineGeom = new THREE.BufferGeometry().setFromPoints(points);
-      const lineMat = new THREE.LineBasicMaterial({
-        color: COLORS.winning,
-        linewidth: 3,
-        transparent: true,
-        opacity: 0.8
-      });
+      const lineMat = new THREE.LineBasicMaterial({ color: COLORS.winning, linewidth: 3, transparent: true, opacity: 0.8 });
       const winLine = new THREE.Line(lineGeom, lineMat);
+      winLine.userData.isWinningLine = true;
       scene.add(winLine);
-
-      // Pulse cells
       line.forEach(([r, c]) => {
         const cellMesh = cellMeshes.find(m => m.userData.row === r && m.userData.col === c);
         if (cellMesh) {
@@ -1303,19 +1143,16 @@
           cellMesh.material.opacity = 0.6;
         }
       });
-
-      // Animate winning pieces
+      const currentSessionId = gameState.sessionId;
       line.forEach(([r, c]) => {
-        const stack = board[r][c];
+        const stack = gameState.board[r][c];
         if (stack.length > 0) {
           const topId = stack[stack.length - 1];
           const mesh = pieceMeshes[topId];
           if (mesh) {
             const startTime = Date.now();
-            const currentWinningLine = winningLine; // キャプチャ
             function pulse() {
-              // winningLineが変わったら停止
-              if (gameOver && winningLine === currentWinningLine && pieceMeshes[topId]) {
+              if (gameState.gameOver && gameState.sessionId === currentSessionId && pieceMeshes[topId]) {
                 const elapsed = Date.now() - startTime;
                 const scale = 1 + Math.sin(elapsed / 200) * 0.1;
                 mesh.scale.setScalar(scale);
@@ -1330,19 +1167,13 @@
     }
 
     function updatePieceVisibility() {
-      // Hide pieces that are covered
       for (let r = 0; r < 3; r++) {
         for (let c = 0; c < 3; c++) {
-          const stack = board[r][c];
+          const stack = gameState.board[r][c];
           stack.forEach((pieceId, index) => {
             const mesh = pieceMeshes[pieceId];
             if (mesh) {
-              // Only show top piece fully, others partially
-              if (index === stack.length - 1) {
-                mesh.material.opacity = 1;
-              } else {
-                mesh.material.opacity = 0.3;
-              }
+              mesh.material.opacity = (index === stack.length - 1) ? 1 : 0.3;
             }
           });
         }
@@ -1350,22 +1181,15 @@
     }
 
     function resetBoard3D() {
-      // Remove all piece meshes
-      Object.values(pieceMeshes).forEach(mesh => {
-        scene.remove(mesh);
-      });
+      Object.values(pieceMeshes).forEach(mesh => { scene.remove(mesh); });
       pieceMeshes = {};
-
-      // Reset cell colors
       cellMeshes.forEach(cell => {
         cell.material.color.setHex(COLORS.cell);
         cell.material.emissive = new THREE.Color(0x000000);
         cell.material.emissiveIntensity = 0;
         cell.material.opacity = 0.3;
       });
-
-      // Remove winning lines
-      scene.children = scene.children.filter(child => !(child instanceof THREE.Line && child.material.color.getHex() === COLORS.winning));
+      scene.children = scene.children.filter(child => !child.userData?.isWinningLine);
     }
 
     function onWindowResize() {
@@ -1378,20 +1202,16 @@
     function onMouseMove(event) {
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
       raycaster.setFromCamera(mouse, camera);
       const intersects = raycaster.intersectObjects(cellMeshes);
-
-      // Reset previous hover
       if (hoveredCell && hoveredCell !== intersects[0]?.object) {
-        if (!winningLine || !winningLine.some(([r,c]) =>
+        if (!gameState.winningLine || !gameState.winningLine.some(([r,c]) =>
             hoveredCell.userData.row === r && hoveredCell.userData.col === c)) {
           hoveredCell.material.color.setHex(COLORS.cell);
           hoveredCell.material.opacity = 0.3;
         }
       }
-
-      if (intersects.length > 0 && !gameOver && selectedPieceId) {
+      if (intersects.length > 0 && !gameState.gameOver && gameState.selectedPieceId !== null) {
         hoveredCell = intersects[0].object;
         hoveredCell.material.color.setHex(COLORS.cellHover);
         hoveredCell.material.opacity = 0.5;
@@ -1403,13 +1223,34 @@
     }
 
     function onClick3D(event) {
-      if (gameOver || isAIThinking) return;
-
+      if (gameState.gameOver || gameState.isAIThinking) return;
       raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(cellMeshes);
 
-      if (intersects.length > 0 && selectedPieceId) {
-        const cell = intersects[0].object;
+      // 盤上の駒をクリックして選択
+      const pieceMeshArray = Object.values(pieceMeshes).filter(m => m.visible);
+      const pieceIntersects = raycaster.intersectObjects(pieceMeshArray, true);
+      if (pieceIntersects.length > 0 && gameState.selectedPieceId === null) {
+        let target = pieceIntersects[0].object;
+        while (target && !target.userData.pieceId) { target = target.parent; }
+        if (target && target.userData.pieceId) {
+          const piece = gameState.pieces[target.userData.pieceId];
+          if (piece.owner === gameState.currentPlayer && piece.row !== null) {
+            const stack = gameState.board[piece.row][piece.col];
+            if (stack[stack.length - 1] === piece.id) {
+              gameState.selectedPieceId = piece.id;
+              setStatusMessage('移動先のセルを選択');
+              playSound('select');
+              renderReserves();
+              return;
+            }
+          }
+        }
+      }
+
+      // セルをクリックして配置
+      const cellIntersects = raycaster.intersectObjects(cellMeshes);
+      if (cellIntersects.length > 0 && gameState.selectedPieceId !== null) {
+        const cell = cellIntersects[0].object;
         const { row, col } = cell.userData;
         handleCellClick(row, col);
       }
@@ -1417,147 +1258,118 @@
 
     function animate() {
       requestAnimationFrame(animate);
-
       const delta = clock.getDelta();
       const time = clock.getElapsedTime();
-
-      // Rotate particles slowly
-      if (particleSystem) {
-        particleSystem.rotation.y += delta * 0.05;
-      }
-
-      // Subtle camera movement
+      if (particleSystem) { particleSystem.rotation.y += delta * 0.05; }
       camera.position.x = Math.sin(time * 0.2) * 0.5;
       camera.position.z = 10 + Math.cos(time * 0.15) * 0.3;
       camera.lookAt(0, 0, 0);
-
-      // Pulse glow lights
-      glowLights.forEach((light, i) => {
-        light.intensity = 0.8 + Math.sin(time * 2 + i) * 0.3;
-      });
-
-      // Animate board tilt based on current player
-      if (!gameOver) {
-        const targetRotation = currentPlayer === 'P1' ? -0.05 : 0.05;
+      glowLights.forEach((light, i) => { light.intensity = 0.8 + Math.sin(time * 2 + i) * 0.3; });
+      if (!gameState.gameOver) {
+        const targetRotation = gameState.currentPlayer === 1 ? -0.05 : 0.05;
         boardGroup.rotation.y += (targetRotation - boardGroup.rotation.y) * 0.02;
       }
-
       renderer.render(scene, camera);
     }
 
-    // ====== ゲーム状態 ======
-    const BOARD_SIZE = 3;
+    // ====================================
+    // ゲームロジック（完全書き直し）
+    // ====================================
     const SIZE_RANK = { small: 1, medium: 2, large: 3 };
 
-    let board = [];
-    let pieces = {};
-    let currentPlayer = 'P1';
-    let selectedPieceId = null;
-    let winner = null;
-    let winningLine = null;
-    let gameOver = false;
-    let gameMode = null;
-    let aiLevel = null;
-    let isAIThinking = false;
+    // ゲーム状態（すべて1つのオブジェクトで管理）
+    const gameState = {
+      sessionId: 0,
+      board: [],           // board[row][col] = [pieceId, pieceId, ...] (スタック)
+      pieces: {},          // pieces[id] = { id, owner, size, row, col } (row/col = null なら手持ち)
+      currentPlayer: 1,    // 1 = P1 (Blue), 2 = P2 (Green/AI)
+      selectedPieceId: null,
+      winner: null,
+      winningLine: null,
+      gameOver: false,
+      gameMode: null,      // '2P' or 'CPU'
+      aiLevel: null,
+      isAIThinking: false
+    };
 
+    // DOM要素
     const statusMainEl = document.getElementById('status-main');
     const statusMsgEl = document.getElementById('status-message');
-    const statusBarEl = document.getElementById('status-bar');
-    const btnNewGame = document.getElementById('btn-new-game');
     const victoryOverlay = document.getElementById('victory-overlay');
     const victoryText = document.getElementById('victory-text');
     const victorySub = document.getElementById('victory-sub');
     const thinkingIndicator = document.getElementById('thinking-indicator');
 
-    // ====== 初期化 ======
-    function initBoardArray() {
-      board = [];
-      for (let r = 0; r < BOARD_SIZE; r++) {
+    // ====================================
+    // 初期化
+    // ====================================
+    function initBoard() {
+      gameState.board = [];
+      for (let r = 0; r < 3; r++) {
         const row = [];
-        for (let c = 0; c < BOARD_SIZE; c++) {
-          row.push([]);
-        }
-        board.push(row);
+        for (let c = 0; c < 3; c++) { row.push([]); }
+        gameState.board.push(row);
       }
     }
 
     function initPieces() {
-      pieces = {};
-      const config = [
-        { size: 'large', count: 2 },
-        { size: 'medium', count: 2 },
-        { size: 'small', count: 2 }
-      ];
-
-      ['P1', 'P2'].forEach(owner => {
-        config.forEach(cfg => {
-          for (let i = 0; i < cfg.count; i++) {
-            const id = `${owner}-${cfg.size}-${i}`;
-            pieces[id] = {
-              id,
-              owner,
-              size: cfg.size,
-              location: 'reserve'
-            };
-          }
+      gameState.pieces = {};
+      const sizes = ['large', 'large', 'medium', 'medium', 'small', 'small'];
+      [1, 2].forEach(owner => {
+        sizes.forEach((size, i) => {
+          const id = `P${owner}-${size}-${i}`;
+          gameState.pieces[id] = { id, owner, size, row: null, col: null };
         });
       });
     }
 
     function newGame() {
-      initBoardArray();
+      gameState.sessionId++;
+      initBoard();
       initPieces();
       resetBoard3D();
-      currentPlayer = 'P1';
-      selectedPieceId = null;
-      winner = null;
-      winningLine = null;
-      gameOver = false;
+      gameState.currentPlayer = 1;
+      gameState.selectedPieceId = null;
+      gameState.winner = null;
+      gameState.winningLine = null;
+      gameState.gameOver = false;
+      gameState.isAIThinking = false;
       victoryOverlay.classList.remove('active');
       renderReserves();
       updateStatusBar();
-      setStatusMessage('駒を選んでボード上に配置してください');
+      setStatusMessage('駒を選んでボードに配置');
     }
 
-    // ====== UI描画 ======
+    // ====================================
+    // UI描画
+    // ====================================
     function renderReserves() {
       const p1Container = document.getElementById('reserve-pieces-p1');
       const p2Container = document.getElementById('reserve-pieces-p2');
       p1Container.innerHTML = '';
       p2Container.innerHTML = '';
-
-      // Sort by size (large first)
       const sizeOrder = { large: 0, medium: 1, small: 2 };
-
-      Object.values(pieces)
-        .filter(p => p.location === 'reserve')
+      Object.values(gameState.pieces)
+        .filter(p => p.row === null)
         .sort((a, b) => sizeOrder[a.size] - sizeOrder[b.size])
         .forEach(piece => {
           const el = document.createElement('div');
-          el.className = `reserve-piece ${piece.owner.toLowerCase()} ${piece.size}`;
+          el.className = `reserve-piece p${piece.owner} ${piece.size}`;
           el.dataset.pieceId = piece.id;
-          if (piece.id === selectedPieceId) {
-            el.classList.add('selected');
-          }
+          if (piece.id === gameState.selectedPieceId) { el.classList.add('selected'); }
           el.addEventListener('click', (e) => onReservePieceClick(e, piece.id));
-
-          if (piece.owner === 'P1') {
-            p1Container.appendChild(el);
-          } else {
-            p2Container.appendChild(el);
-          }
+          (piece.owner === 1 ? p1Container : p2Container).appendChild(el);
         });
     }
 
     function updateStatusBar() {
-      if (winner) {
-        const playerName = winner === 'P1' ? 'Player 1' : (gameMode === 'CPU' ? 'AI' : 'Player 2');
-        statusMainEl.textContent = `${playerName} Wins!`;
-        statusMainEl.className = `status-main ${winner.toLowerCase()}`;
+      const playerName = p => p === 1 ? 'Player 1 (Blue)' : (gameState.gameMode === 'CPU' ? 'AI (Green)' : 'Player 2 (Green)');
+      if (gameState.winner) {
+        statusMainEl.textContent = `${playerName(gameState.winner)} Wins!`;
+        statusMainEl.className = `status-main p${gameState.winner}`;
       } else {
-        const playerName = currentPlayer === 'P1' ? 'Player 1' : (gameMode === 'CPU' ? 'AI' : 'Player 2');
-        statusMainEl.textContent = `${playerName} のターン`;
-        statusMainEl.className = `status-main ${currentPlayer.toLowerCase()}`;
+        statusMainEl.textContent = `${playerName(gameState.currentPlayer)} のターン`;
+        statusMainEl.className = `status-main p${gameState.currentPlayer}`;
       }
     }
 
@@ -1568,192 +1380,187 @@
 
     function flashError(msg) {
       setStatusMessage(msg, true);
-      setTimeout(() => {
-        if (!winner) setStatusMessage('');
-      }, 1500);
+      playSound('error');
+      setTimeout(() => { if (!gameState.winner) setStatusMessage(''); }, 1500);
     }
 
-    function showVictory(winnerPlayer) {
-      const playerName = winnerPlayer === 'P1' ? 'Player 1' : (gameMode === 'CPU' ? 'AI' : 'Player 2');
+    function showVictory(winner) {
+      const playerName = winner === 1 ? 'Player 1' : (gameState.gameMode === 'CPU' ? 'AI' : 'Player 2');
       victoryText.textContent = `${playerName} Wins!`;
-      victoryText.className = `victory-text ${winnerPlayer.toLowerCase()}`;
-      victorySub.textContent = winnerPlayer === 'P1' ? '光の勝利!' : 'グリーンの支配!';
+      victoryText.className = `victory-text p${winner}`;
+      victorySub.textContent = winner === 1 ? '青の勝利!' : '緑の支配!';
       victoryOverlay.classList.add('active');
     }
 
-    // ====== イベントハンドラ ======
+    // ====================================
+    // イベントハンドラ
+    // ====================================
     function onReservePieceClick(e, pieceId) {
-      if (gameOver || isAIThinking) return;
+      if (gameState.gameOver || gameState.isAIThinking) return;
       e.stopPropagation();
+      const piece = gameState.pieces[pieceId];
 
-      const piece = pieces[pieceId];
-      if (piece.owner !== currentPlayer) {
+      // 相手の駒は選択できない
+      if (piece.owner !== gameState.currentPlayer) {
         flashError('相手の駒は選択できません');
-        playSound('error');
         return;
       }
 
-      if (selectedPieceId === pieceId) {
-        selectedPieceId = null;
+      // 同じ駒をクリックで選択解除
+      if (gameState.selectedPieceId === pieceId) {
+        gameState.selectedPieceId = null;
         setStatusMessage('');
       } else {
-        selectedPieceId = pieceId;
+        gameState.selectedPieceId = pieceId;
         setStatusMessage('ボード上のセルをクリックして配置');
         playSound('select');
       }
-
       renderReserves();
     }
 
     function handleCellClick(row, col) {
-      if (gameOver || isAIThinking) return;
+      if (gameState.gameOver || gameState.isAIThinking) return;
 
-      if (!selectedPieceId) {
-        // Try to select piece from board
-        const stack = board[row][col];
+      // 駒が選択されていない場合、盤上の自分の駒を選択
+      if (gameState.selectedPieceId === null) {
+        const stack = gameState.board[row][col];
         if (stack.length > 0) {
           const topId = stack[stack.length - 1];
-          const topPiece = pieces[topId];
-          if (topPiece.owner === currentPlayer) {
-            selectedPieceId = topId;
+          const topPiece = gameState.pieces[topId];
+          if (topPiece.owner === gameState.currentPlayer) {
+            gameState.selectedPieceId = topId;
             setStatusMessage('移動先のセルを選択');
             playSound('select');
             renderReserves();
             return;
           } else {
             flashError('相手の駒は選択できません');
-            playSound('error');
             return;
           }
         }
         flashError('まず駒を選択してください');
-        playSound('error');
         return;
       }
 
-      const piece = pieces[selectedPieceId];
-      if (piece.owner !== currentPlayer) {
+      const piece = gameState.pieces[gameState.selectedPieceId];
+
+      // 現在のプレイヤーの駒かチェック
+      if (piece.owner !== gameState.currentPlayer) {
         flashError('相手の駒は動かせません');
-        playSound('error');
-        selectedPieceId = null;
+        gameState.selectedPieceId = null;
         renderReserves();
         return;
       }
 
-      // Check if can place
-      const destStack = board[row][col];
-      const topId = destStack.length ? destStack[destStack.length - 1] : null;
-      const isGobble = topId !== null;
+      // 配置可能かチェック
+      const destStack = gameState.board[row][col];
+      const topId = destStack.length > 0 ? destStack[destStack.length - 1] : null;
 
       if (topId) {
-        const topPiece = pieces[topId];
+        const topPiece = gameState.pieces[topId];
         if (SIZE_RANK[piece.size] <= SIZE_RANK[topPiece.size]) {
           flashError('同サイズ以上の駒の上には置けません');
-          playSound('error');
           return;
         }
       }
 
-      // Execute move
-      const fromLocation = piece.location;
-      const isMove = fromLocation !== 'reserve';
+      // 移動元から削除
+      const isFromBoard = piece.row !== null;
+      const fromRow = piece.row;
+      const fromCol = piece.col;
+      const isGobble = topId !== null;
 
-      // Remove from old position
-      if (isMove) {
-        const { row: fromRow, col: fromCol } = fromLocation;
-        const fromStack = board[fromRow][fromCol];
-        const index = fromStack.indexOf(piece.id);
-        if (index !== -1) fromStack.splice(index, 1);
+      if (isFromBoard) {
+        const fromStack = gameState.board[fromRow][fromCol];
+        const idx = fromStack.indexOf(piece.id);
+        if (idx !== -1) fromStack.splice(idx, 1);
+      }
 
-        // Animate move
+      // 移動先に追加
+      destStack.push(piece.id);
+      piece.row = row;
+      piece.col = col;
+
+      // 3D表示更新
+      if (isFromBoard) {
         movePiece3D(piece.id, fromRow, fromCol, row, col);
       } else {
-        // Place from reserve
         placePiece3D(piece.id, row, col, true);
       }
 
-      // Play appropriate sound
-      if (isGobble) {
-        playSound('gobble');
-      } else if (isMove) {
-        playSound('move');
-      } else {
-        playSound('place');
-      }
+      // 効果音
+      if (isGobble) { playSound('gobble'); }
+      else if (isFromBoard) { playSound('move'); }
+      else { playSound('place'); }
 
-      // Add to new position
-      destStack.push(piece.id);
-      piece.location = { row, col };
-      selectedPieceId = null;
-
+      gameState.selectedPieceId = null;
       updatePieceVisibility();
       renderReserves();
 
-      // Check win
-      const winOwner = checkWin();
-      if (winOwner) {
-        winner = winOwner;
-        gameOver = true;
-        highlightWinningLine3D(winningLine, winOwner);
+      // 勝敗判定
+      const result = checkWin();
+      if (result) {
+        gameState.winner = result.winner;
+        gameState.winningLine = result.line;
+        gameState.gameOver = true;
+        highlightWinningLine3D(result.line, result.winner);
         playSound('win');
-        setTimeout(() => showVictory(winOwner), 800);
+        setTimeout(() => showVictory(result.winner), 800);
       } else {
-        currentPlayer = currentPlayer === 'P1' ? 'P2' : 'P1';
+        // ターン交代
+        gameState.currentPlayer = gameState.currentPlayer === 1 ? 2 : 1;
         setStatusMessage('');
         playSound('turn');
-      }
 
+        // AI のターン
+        if (gameState.gameMode === 'CPU' && gameState.currentPlayer === 2) {
+          setTimeout(() => aiMove(), 600);
+        }
+      }
       updateStatusBar();
-
-      // AI turn
-      if (!gameOver && gameMode === 'CPU' && currentPlayer === 'P2') {
-        setTimeout(() => aiMove(), 600);
-      }
     }
 
-    // ====== 勝敗判定 ======
+    // ====================================
+    // 勝敗判定
+    // ====================================
     function checkWin() {
       const lines = [
         [[0,0],[0,1],[0,2]], [[1,0],[1,1],[1,2]], [[2,0],[2,1],[2,2]],
         [[0,0],[1,0],[2,0]], [[0,1],[1,1],[2,1]], [[0,2],[1,2],[2,2]],
         [[0,0],[1,1],[2,2]], [[0,2],[1,1],[2,0]]
       ];
-
-      winningLine = null;
-
       for (const line of lines) {
-        let owner = null;
-        let valid = true;
-
-        for (const [r, c] of line) {
-          const stack = board[r][c];
-          if (!stack.length) {
-            valid = false;
-            break;
-          }
-          const topPiece = pieces[stack[stack.length - 1]];
-          if (!owner) {
-            owner = topPiece.owner;
-          } else if (owner !== topPiece.owner) {
-            valid = false;
-            break;
-          }
-        }
-
-        if (valid && owner) {
-          winningLine = line;
-          return owner;
+        const owners = line.map(([r, c]) => {
+          const stack = gameState.board[r][c];
+          if (stack.length === 0) return null;
+          return gameState.pieces[stack[stack.length - 1]].owner;
+        });
+        if (owners[0] !== null && owners[0] === owners[1] && owners[1] === owners[2]) {
+          return { winner: owners[0], line };
         }
       }
-
       return null;
     }
 
-    // ====== モード選択 ======
-    function selectMode(mode) {
-      gameMode = mode;
-      document.getElementById('mode-modal').classList.add('hidden');
+    // ボードのコピー（AI用）
+    function copyBoard() {
+      return gameState.board.map(row => row.map(stack => [...stack]));
+    }
 
+    function copyPieces() {
+      const copy = {};
+      for (const id in gameState.pieces) {
+        copy[id] = { ...gameState.pieces[id] };
+      }
+      return copy;
+    }
+
+    // ====================================
+    // モード選択
+    // ====================================
+    function selectMode(mode) {
+      gameState.gameMode = mode;
+      document.getElementById('mode-modal').classList.add('hidden');
       if (mode === 'CPU') {
         document.getElementById('level-modal').classList.remove('hidden');
       } else {
@@ -1762,7 +1569,7 @@
     }
 
     function selectLevel(level) {
-      aiLevel = level;
+      gameState.aiLevel = level;
       document.getElementById('level-modal').classList.add('hidden');
       startGame();
     }
@@ -1770,20 +1577,14 @@
     function startGame() {
       newGame();
       playSound('start');
-      if (gameMode === 'CPU' && currentPlayer === 'P2') {
-        setTimeout(() => aiMove(), 800);
-      }
     }
 
     function showModeSelection() {
-      // 勝利オーバーレイを閉じる
       victoryOverlay.classList.remove('active');
-      // ゲーム状態をリセット
-      gameOver = false;
-      winner = null;
-      winningLine = null;
-      isAIThinking = false;
-      // モーダルを表示
+      gameState.gameOver = false;
+      gameState.winner = null;
+      gameState.winningLine = null;
+      gameState.isAIThinking = false;
       document.getElementById('mode-modal').classList.remove('hidden');
       document.getElementById('level-modal').classList.add('hidden');
       document.getElementById('howto-modal').classList.add('hidden');
@@ -1799,179 +1600,240 @@
       document.getElementById('mode-modal').classList.remove('hidden');
     }
 
-    // ====== AI ロジック（強化版）======
+    // ====================================
+    // AI ロジック
+    // ====================================
     function aiMove() {
-      if (gameOver || isAIThinking || gameMode !== 'CPU' || currentPlayer !== 'P2') return;
+      if (gameState.gameOver || gameState.isAIThinking) return;
+      if (gameState.gameMode !== 'CPU' || gameState.currentPlayer !== 2) return;
 
-      isAIThinking = true;
+      gameState.isAIThinking = true;
       thinkingIndicator.classList.add('active');
       setStatusMessage('AI思考中...');
 
-      const thinkTime = aiLevel === 'pro' ? 1200 : (aiLevel === 'advanced' ? 800 : 500);
+      const thinkTime = gameState.aiLevel === 'pro' ? 1000 : (gameState.aiLevel === 'advanced' ? 600 : 400);
 
       setTimeout(() => {
         let move = null;
-
-        switch (aiLevel) {
-          case 'beginner':
-            move = aiBeginnerMove();
-            break;
-          case 'intermediate':
-            move = aiIntermediateMove();
-            break;
-          case 'advanced':
-            move = aiAdvancedMove();
-            break;
-          case 'pro':
-            move = aiProMove();
-            break;
+        switch (gameState.aiLevel) {
+          case 'beginner': move = aiBeginnerMove(); break;
+          case 'intermediate': move = aiIntermediateMove(); break;
+          case 'advanced': move = aiAdvancedMove(); break;
+          case 'pro': move = aiProMove(); break;
         }
+
+        gameState.isAIThinking = false;
+        thinkingIndicator.classList.remove('active');
 
         if (move) {
-          executeAIMove(move);
+          executeMove(move.pieceId, move.toRow, move.toCol);
         }
-
-        isAIThinking = false;
-        thinkingIndicator.classList.remove('active');
       }, thinkTime);
     }
 
-    // 合法手を全取得
-    function getAllLegalMoves(player) {
+    // 合法手を取得（指定プレイヤー）
+    function getAllLegalMoves(player, boardState, piecesState) {
       const moves = [];
+      for (const id in piecesState) {
+        const piece = piecesState[id];
+        if (piece.owner !== player) continue;
 
-      Object.values(pieces).forEach(piece => {
-        if (piece.owner === player) {
-          if (piece.location === 'reserve') {
-            // Reserve pieces
-            for (let r = 0; r < 3; r++) {
-              for (let c = 0; c < 3; c++) {
-                if (canPlacePiece(piece.id, r, c)) {
-                  moves.push({ pieceId: piece.id, row: r, col: c });
-                }
-              }
-            }
-          } else {
-            // Board pieces (top only)
-            const { row: fromRow, col: fromCol } = piece.location;
-            const stack = board[fromRow][fromCol];
-            if (stack[stack.length - 1] === piece.id) {
-              for (let r = 0; r < 3; r++) {
-                for (let c = 0; c < 3; c++) {
-                  if (r !== fromRow || c !== fromCol) {
-                    if (canPlacePiece(piece.id, r, c)) {
-                      moves.push({ pieceId: piece.id, row: r, col: c });
-                    }
-                  }
-                }
+        const isOnBoard = piece.row !== null;
+
+        // 盤上にある駒は一番上のものだけ動かせる
+        if (isOnBoard) {
+          const stack = boardState[piece.row][piece.col];
+          if (stack[stack.length - 1] !== piece.id) continue;
+        }
+
+        // 各セルへの配置をチェック
+        for (let r = 0; r < 3; r++) {
+          for (let c = 0; c < 3; c++) {
+            // 同じ位置への移動はスキップ
+            if (isOnBoard && piece.row === r && piece.col === c) continue;
+
+            const destStack = boardState[r][c];
+            if (destStack.length === 0) {
+              moves.push({ pieceId: piece.id, toRow: r, toCol: c });
+            } else {
+              const topId = destStack[destStack.length - 1];
+              const topPiece = piecesState[topId];
+              if (SIZE_RANK[piece.size] > SIZE_RANK[topPiece.size]) {
+                moves.push({ pieceId: piece.id, toRow: r, toCol: c });
               }
             }
           }
         }
-      });
-
+      }
       return moves;
     }
 
-    function canPlacePiece(pieceId, row, col) {
-      const piece = pieces[pieceId];
-      const destStack = board[row][col];
-      const topId = destStack.length ? destStack[destStack.length - 1] : null;
+    // 手を適用（シミュレーション用）
+    function applyMoveToState(move, boardState, piecesState) {
+      const piece = piecesState[move.pieceId];
+      const oldRow = piece.row;
+      const oldCol = piece.col;
 
-      if (!topId) return true;
-      return SIZE_RANK[piece.size] > SIZE_RANK[pieces[topId].size];
+      // 元の位置から削除
+      if (oldRow !== null) {
+        const fromStack = boardState[oldRow][oldCol];
+        const idx = fromStack.indexOf(piece.id);
+        if (idx !== -1) fromStack.splice(idx, 1);
+      }
+
+      // 新しい位置に追加
+      boardState[move.toRow][move.toCol].push(piece.id);
+      piece.row = move.toRow;
+      piece.col = move.toCol;
+
+      return { pieceId: piece.id, oldRow, oldCol };
     }
 
-    // 初心者AI
+    // 手を元に戻す（シミュレーション用）
+    function undoMoveFromState(undoInfo, boardState, piecesState) {
+      const piece = piecesState[undoInfo.pieceId];
+      const currentRow = piece.row;
+      const currentCol = piece.col;
+
+      // 現在位置から削除
+      const currentStack = boardState[currentRow][currentCol];
+      const idx = currentStack.indexOf(piece.id);
+      if (idx !== -1) currentStack.splice(idx, 1);
+
+      // 元の位置に戻す
+      if (undoInfo.oldRow !== null) {
+        boardState[undoInfo.oldRow][undoInfo.oldCol].push(piece.id);
+      }
+      piece.row = undoInfo.oldRow;
+      piece.col = undoInfo.oldCol;
+    }
+
+    // 勝者を判定（シミュレーション用）
+    function checkWinFromState(boardState, piecesState) {
+      const lines = [
+        [[0,0],[0,1],[0,2]], [[1,0],[1,1],[1,2]], [[2,0],[2,1],[2,2]],
+        [[0,0],[1,0],[2,0]], [[0,1],[1,1],[2,1]], [[0,2],[1,2],[2,2]],
+        [[0,0],[1,1],[2,2]], [[0,2],[1,1],[2,0]]
+      ];
+      for (const line of lines) {
+        const owners = line.map(([r, c]) => {
+          const stack = boardState[r][c];
+          if (stack.length === 0) return null;
+          return piecesState[stack[stack.length - 1]].owner;
+        });
+        if (owners[0] !== null && owners[0] === owners[1] && owners[1] === owners[2]) {
+          return owners[0];
+        }
+      }
+      return null;
+    }
+
+    // 初心者AI：ランダム
     function aiBeginnerMove() {
-      const moves = getAllLegalMoves('P2');
+      const moves = getAllLegalMoves(2, gameState.board, gameState.pieces);
+      if (moves.length === 0) return null;
       return moves[Math.floor(Math.random() * moves.length)];
     }
 
-    // 中級AI
+    // 中級AI：勝てるなら勝つ、負けそうなら防ぐ
     function aiIntermediateMove() {
-      // Win if possible
-      const winMove = findWinningMove('P2');
-      if (winMove) return winMove;
+      const board = copyBoard();
+      const pieces = copyPieces();
+      const aiMoves = getAllLegalMoves(2, board, pieces);
 
-      // Block opponent's win
-      const blockMove = findWinningMove('P1');
-      if (blockMove) return blockMove;
+      // AIが勝てる手を探す
+      for (const move of aiMoves) {
+        const undoInfo = applyMoveToState(move, board, pieces);
+        const winner = checkWinFromState(board, pieces);
+        undoMoveFromState(undoInfo, board, pieces);
+        if (winner === 2) return move;
+      }
 
-      // Prioritize center
-      const centerMove = findCenterMove('P2');
+      // P1の勝ちを防ぐ
+      // P1の手をシミュレートして、P1が勝てる位置を見つける
+      const p1Moves = getAllLegalMoves(1, board, pieces);
+      for (const p1Move of p1Moves) {
+        const undoInfo = applyMoveToState(p1Move, board, pieces);
+        const winner = checkWinFromState(board, pieces);
+        undoMoveFromState(undoInfo, board, pieces);
+        if (winner === 1) {
+          // この位置をAIがブロックできるか
+          for (const aiMove of aiMoves) {
+            if (aiMove.toRow === p1Move.toRow && aiMove.toCol === p1Move.toCol) {
+              return aiMove;
+            }
+          }
+        }
+      }
+
+      // 中央を優先
+      const centerMove = aiMoves.find(m => m.toRow === 1 && m.toCol === 1);
       if (centerMove) return centerMove;
 
+      // ランダム
       return aiBeginnerMove();
     }
 
-    // 上級AI（ミニマックス法）
+    // 上級AI：ミニマックス
     function aiAdvancedMove() {
-      const moves = getAllLegalMoves('P2');
+      const board = copyBoard();
+      const pieces = copyPieces();
+      const moves = getAllLegalMoves(2, board, pieces);
+      if (moves.length === 0) return null;
+
       let bestMove = null;
       let bestScore = -Infinity;
 
       for (const move of moves) {
-        const undoInfo = applyMove(move);
-        const score = minimax(2, false, -Infinity, Infinity);
-        undoMove(undoInfo);
-
+        const undoInfo = applyMoveToState(move, board, pieces);
+        const score = minimax(board, pieces, 2, false, -Infinity, Infinity);
+        undoMoveFromState(undoInfo, board, pieces);
         if (score > bestScore) {
           bestScore = score;
           bestMove = move;
         }
       }
-
       return bestMove || aiIntermediateMove();
     }
 
-    // プロAI（深いミニマックス + 高度な評価）
+    // プロAI：深いミニマックス
     function aiProMove() {
-      const moves = getAllLegalMoves('P2');
+      const board = copyBoard();
+      const pieces = copyPieces();
+      const moves = getAllLegalMoves(2, board, pieces);
+      if (moves.length === 0) return null;
+
       let bestMove = null;
       let bestScore = -Infinity;
 
-      // Sort moves by preliminary evaluation for better pruning
-      const scoredMoves = moves.map(move => {
-        const undoInfo = applyMove(move);
-        const score = evaluatePosition('P2');
-        undoMove(undoInfo);
-        return { move, score };
-      });
-      scoredMoves.sort((a, b) => b.score - a.score);
-
-      for (const { move } of scoredMoves) {
-        const undoInfo = applyMove(move);
-        const score = minimax(4, false, -Infinity, Infinity);
-        undoMove(undoInfo);
-
+      for (const move of moves) {
+        const undoInfo = applyMoveToState(move, board, pieces);
+        const score = minimax(board, pieces, 4, false, -Infinity, Infinity);
+        undoMoveFromState(undoInfo, board, pieces);
         if (score > bestScore) {
           bestScore = score;
           bestMove = move;
         }
       }
-
       return bestMove || aiAdvancedMove();
     }
 
-    // ミニマックス + α-β枝刈り
-    function minimax(depth, isMaximizing, alpha, beta) {
-      const winOwner = checkWin();
-      if (winOwner === 'P2') return 10000 + depth;
-      if (winOwner === 'P1') return -10000 - depth;
-      if (depth === 0) return evaluatePosition('P2');
+    function minimax(boardState, piecesState, depth, isMaximizing, alpha, beta) {
+      const winner = checkWinFromState(boardState, piecesState);
+      if (winner === 2) return 10000 + depth;
+      if (winner === 1) return -10000 - depth;
+      if (depth === 0) return evaluateBoard(boardState, piecesState);
 
-      const player = isMaximizing ? 'P2' : 'P1';
-      const moves = getAllLegalMoves(player);
-
-      if (moves.length === 0) return evaluatePosition('P2');
+      const player = isMaximizing ? 2 : 1;
+      const moves = getAllLegalMoves(player, boardState, piecesState);
+      if (moves.length === 0) return evaluateBoard(boardState, piecesState);
 
       if (isMaximizing) {
         let maxScore = -Infinity;
         for (const move of moves) {
-          const undoInfo = applyMove(move);
-          const score = minimax(depth - 1, false, alpha, beta);
-          undoMove(undoInfo);
+          const undoInfo = applyMoveToState(move, boardState, piecesState);
+          const score = minimax(boardState, piecesState, depth - 1, false, alpha, beta);
+          undoMoveFromState(undoInfo, boardState, piecesState);
           maxScore = Math.max(maxScore, score);
           alpha = Math.max(alpha, score);
           if (beta <= alpha) break;
@@ -1980,9 +1842,9 @@
       } else {
         let minScore = Infinity;
         for (const move of moves) {
-          const undoInfo = applyMove(move);
-          const score = minimax(depth - 1, true, alpha, beta);
-          undoMove(undoInfo);
+          const undoInfo = applyMoveToState(move, boardState, piecesState);
+          const score = minimax(boardState, piecesState, depth - 1, true, alpha, beta);
+          undoMoveFromState(undoInfo, boardState, piecesState);
           minScore = Math.min(minScore, score);
           beta = Math.min(beta, score);
           if (beta <= alpha) break;
@@ -1991,11 +1853,8 @@
       }
     }
 
-    // 高度な局面評価
-    function evaluatePosition(player) {
+    function evaluateBoard(boardState, piecesState) {
       let score = 0;
-      const opponent = player === 'P1' ? 'P2' : 'P1';
-
       const lines = [
         [[0,0],[0,1],[0,2]], [[1,0],[1,1],[1,2]], [[2,0],[2,1],[2,2]],
         [[0,0],[1,0],[2,0]], [[0,1],[1,1],[2,1]], [[0,2],[1,2],[2,2]],
@@ -2003,296 +1862,101 @@
       ];
 
       for (const line of lines) {
-        const lineInfo = analyzeLineAdvanced(line, player, opponent);
-
-        // Win immediately
-        if (lineInfo.playerCount === 3) return 10000;
-        if (lineInfo.opponentCount === 3) return -10000;
-
-        // Two in a row with empty
-        if (lineInfo.playerCount === 2 && lineInfo.emptyCount === 1) score += 100;
-        if (lineInfo.opponentCount === 2 && lineInfo.emptyCount === 1) score -= 150;
-
-        // Potential to gobble
-        if (lineInfo.playerCount === 2 && lineInfo.canGobble) score += 200;
-        if (lineInfo.opponentCount === 2 && lineInfo.opponentCanGobble) score -= 250;
-
-        // One piece in line
-        if (lineInfo.playerCount === 1 && lineInfo.emptyCount === 2) score += 10;
-        if (lineInfo.opponentCount === 1 && lineInfo.emptyCount === 2) score -= 10;
-
-        // Control with large pieces
-        score += lineInfo.playerLargeCount * 15;
-        score -= lineInfo.opponentLargeCount * 15;
+        let aiCount = 0, p1Count = 0, empty = 0;
+        for (const [r, c] of line) {
+          const stack = boardState[r][c];
+          if (stack.length === 0) { empty++; }
+          else {
+            const owner = piecesState[stack[stack.length - 1]].owner;
+            if (owner === 2) aiCount++;
+            else p1Count++;
+          }
+        }
+        if (aiCount === 3) return 10000;
+        if (p1Count === 3) return -10000;
+        if (aiCount === 2 && empty === 1) score += 100;
+        if (p1Count === 2 && empty === 1) score -= 150;
+        if (aiCount === 1 && empty === 2) score += 10;
+        if (p1Count === 1 && empty === 2) score -= 10;
       }
 
-      // Center control bonus
-      const centerStack = board[1][1];
-      if (centerStack.length > 0) {
-        const centerOwner = pieces[centerStack[centerStack.length - 1]].owner;
-        if (centerOwner === player) score += 50;
-        else score -= 50;
+      // 中央ボーナス
+      const center = boardState[1][1];
+      if (center.length > 0) {
+        const centerOwner = piecesState[center[center.length - 1]].owner;
+        score += centerOwner === 2 ? 50 : -50;
       }
-
-      // Corner control
-      const corners = [[0,0], [0,2], [2,0], [2,2]];
-      corners.forEach(([r, c]) => {
-        const stack = board[r][c];
-        if (stack.length > 0) {
-          const owner = pieces[stack[stack.length - 1]].owner;
-          if (owner === player) score += 20;
-          else score -= 20;
-        }
-      });
-
-      // Reserve pieces bonus (having options is good)
-      Object.values(pieces).forEach(piece => {
-        if (piece.location === 'reserve') {
-          if (piece.owner === player) score += SIZE_RANK[piece.size] * 5;
-          else score -= SIZE_RANK[piece.size] * 5;
-        }
-      });
-
-      // Fork potential (multiple winning threats)
-      const playerWinThreats = countWinThreats(player);
-      const opponentWinThreats = countWinThreats(opponent);
-      if (playerWinThreats >= 2) score += 300;
-      if (opponentWinThreats >= 2) score -= 400;
 
       return score;
     }
 
-    function analyzeLineAdvanced(line, player, opponent) {
-      let playerCount = 0;
-      let opponentCount = 0;
-      let emptyCount = 0;
-      let playerLargeCount = 0;
-      let opponentLargeCount = 0;
-      let canGobble = false;
-      let opponentCanGobble = false;
+    // 実際にゲーム状態に手を適用
+    function executeMove(pieceId, toRow, toCol) {
+      const piece = gameState.pieces[pieceId];
+      const isFromBoard = piece.row !== null;
+      const fromRow = piece.row;
+      const fromCol = piece.col;
 
-      for (const [r, c] of line) {
-        const stack = board[r][c];
-        if (stack.length === 0) {
-          emptyCount++;
-        } else {
-          const topPiece = pieces[stack[stack.length - 1]];
-          if (topPiece.owner === player) {
-            playerCount++;
-            if (topPiece.size === 'large') playerLargeCount++;
-          } else {
-            opponentCount++;
-            if (topPiece.size === 'large') opponentLargeCount++;
-          }
+      const destStack = gameState.board[toRow][toCol];
+      const isGobble = destStack.length > 0;
 
-          // Check gobble potential
-          if (topPiece.owner === opponent && topPiece.size !== 'large') {
-            // Can player gobble this?
-            const canGobbleThis = Object.values(pieces).some(p =>
-              p.owner === player &&
-              SIZE_RANK[p.size] > SIZE_RANK[topPiece.size] &&
-              (p.location === 'reserve' ||
-                (p.location !== 'reserve' && board[p.location.row][p.location.col][board[p.location.row][p.location.col].length - 1] === p.id))
-            );
-            if (canGobbleThis) canGobble = true;
-          }
-          if (topPiece.owner === player && topPiece.size !== 'large') {
-            const canOpponentGobbleThis = Object.values(pieces).some(p =>
-              p.owner === opponent &&
-              SIZE_RANK[p.size] > SIZE_RANK[topPiece.size] &&
-              (p.location === 'reserve' ||
-                (p.location !== 'reserve' && board[p.location.row][p.location.col][board[p.location.row][p.location.col].length - 1] === p.id))
-            );
-            if (canOpponentGobbleThis) opponentCanGobble = true;
-          }
-        }
+      // 移動元から削除
+      if (isFromBoard) {
+        const fromStack = gameState.board[fromRow][fromCol];
+        const idx = fromStack.indexOf(piece.id);
+        if (idx !== -1) fromStack.splice(idx, 1);
       }
 
-      return { playerCount, opponentCount, emptyCount, playerLargeCount, opponentLargeCount, canGobble, opponentCanGobble };
-    }
+      // 移動先に追加
+      destStack.push(piece.id);
+      piece.row = toRow;
+      piece.col = toCol;
 
-    function countWinThreats(player) {
-      let threats = 0;
-      const lines = [
-        [[0,0],[0,1],[0,2]], [[1,0],[1,1],[1,2]], [[2,0],[2,1],[2,2]],
-        [[0,0],[1,0],[2,0]], [[0,1],[1,1],[2,1]], [[0,2],[1,2],[2,2]],
-        [[0,0],[1,1],[2,2]], [[0,2],[1,1],[2,0]]
-      ];
-
-      for (const line of lines) {
-        let playerCount = 0;
-        let canComplete = true;
-
-        for (const [r, c] of line) {
-          const stack = board[r][c];
-          if (stack.length === 0) continue;
-
-          const topPiece = pieces[stack[stack.length - 1]];
-          if (topPiece.owner === player) {
-            playerCount++;
-          } else {
-            // Can we gobble?
-            const canGobble = Object.values(pieces).some(p =>
-              p.owner === player &&
-              SIZE_RANK[p.size] > SIZE_RANK[topPiece.size] &&
-              (p.location === 'reserve' ||
-                (p.location !== 'reserve' && board[p.location.row][p.location.col][board[p.location.row][p.location.col].length - 1] === p.id))
-            );
-            if (!canGobble) canComplete = false;
-          }
-        }
-
-        if (playerCount === 2 && canComplete) threats++;
-      }
-
-      return threats;
-    }
-
-    function findWinningMove(player) {
-      const moves = getAllLegalMoves(player);
-      for (const move of moves) {
-        const undoInfo = applyMove(move);
-        const winOwner = checkWin();
-        undoMove(undoInfo);
-        if (winOwner === player) return move;
-      }
-      return null;
-    }
-
-    function findCenterMove(player) {
-      const moves = getAllLegalMoves(player);
-      return moves.find(m => m.row === 1 && m.col === 1) || null;
-    }
-
-    // Move execution for AI evaluation
-    function applyMove(move) {
-      const { pieceId, row, col } = move;
-      const piece = pieces[pieceId];
-      const oldLocation = piece.location;
-      let oldStack = null;
-
-      if (oldLocation !== 'reserve') {
-        const { row: fromRow, col: fromCol } = oldLocation;
-        oldStack = [...board[fromRow][fromCol]];
-        const fromStack = board[fromRow][fromCol];
-        const index = fromStack.indexOf(pieceId);
-        if (index !== -1) fromStack.splice(index, 1);
-      }
-
-      board[row][col].push(pieceId);
-      piece.location = { row, col };
-
-      return { pieceId, oldLocation, oldStack, newRow: row, newCol: col };
-    }
-
-    function undoMove(undoInfo) {
-      const { pieceId, oldLocation, oldStack, newRow, newCol } = undoInfo;
-      const piece = pieces[pieceId];
-
-      const newStack = board[newRow][newCol];
-      const index = newStack.indexOf(pieceId);
-      if (index !== -1) newStack.splice(index, 1);
-
-      if (oldLocation !== 'reserve') {
-        board[oldLocation.row][oldLocation.col] = [...oldStack];
-      }
-      piece.location = oldLocation;
-    }
-
-    function executeAIMove(move) {
-      const { pieceId, row, col } = move;
-      const piece = pieces[pieceId];
-      const fromLocation = piece.location;
-
-      // Check if gobbling
-      const destStack = board[row][col];
-      const topId = destStack.length ? destStack[destStack.length - 1] : null;
-      const isGobble = topId !== null;
-      const isMove = fromLocation !== 'reserve';
-
-      // Remove from old position
-      if (isMove) {
-        const { row: fromRow, col: fromCol } = fromLocation;
-        const fromStack = board[fromRow][fromCol];
-        const index = fromStack.indexOf(pieceId);
-        if (index !== -1) fromStack.splice(index, 1);
-        movePiece3D(pieceId, fromRow, fromCol, row, col);
+      // 3D表示
+      if (isFromBoard) {
+        movePiece3D(piece.id, fromRow, fromCol, toRow, toCol);
       } else {
-        placePiece3D(pieceId, row, col, true);
+        placePiece3D(piece.id, toRow, toCol, true);
       }
 
-      // Play sound
-      if (isGobble) {
-        playSound('gobble');
-      } else if (isMove) {
-        playSound('move');
-      } else {
-        playSound('place');
-      }
-
-      // Add to new position
-      board[row][col].push(pieceId);
-      piece.location = { row, col };
+      // 効果音
+      if (isGobble) { playSound('gobble'); }
+      else if (isFromBoard) { playSound('move'); }
+      else { playSound('place'); }
 
       updatePieceVisibility();
       renderReserves();
 
-      // Check win
-      const winOwner = checkWin();
-      if (winOwner) {
-        winner = winOwner;
-        gameOver = true;
-        highlightWinningLine3D(winningLine, winOwner);
+      // 勝敗判定
+      const result = checkWin();
+      if (result) {
+        gameState.winner = result.winner;
+        gameState.winningLine = result.line;
+        gameState.gameOver = true;
+        highlightWinningLine3D(result.line, result.winner);
         playSound('win');
-        setTimeout(() => showVictory(winOwner), 800);
+        setTimeout(() => showVictory(result.winner), 800);
       } else {
-        currentPlayer = 'P1';
+        gameState.currentPlayer = gameState.currentPlayer === 1 ? 2 : 1;
         setStatusMessage('');
         playSound('turn');
-      }
 
+        if (gameState.gameMode === 'CPU' && gameState.currentPlayer === 2) {
+          setTimeout(() => aiMove(), 600);
+        }
+      }
       updateStatusBar();
     }
 
-    // ====== イベント登録 ======
-    btnNewGame.addEventListener('click', showModeSelection);
+    // ====================================
+    // イベント登録
+    // ====================================
+    document.getElementById('btn-new-game').addEventListener('click', showModeSelection);
     document.getElementById('victory-new-game').addEventListener('click', showModeSelection);
 
-    // 3Dクリックで盤上の駒も選択可能に
-    document.getElementById('game-canvas').addEventListener('click', (event) => {
-      if (gameOver || isAIThinking) return;
-
-      raycaster.setFromCamera(mouse, camera);
-
-      // Check piece meshes first (recursive: true でネストされたオブジェクトもチェック)
-      const pieceMeshArray = Object.values(pieceMeshes).filter(m => m.visible);
-      const pieceIntersects = raycaster.intersectObjects(pieceMeshArray, true);
-
-      if (pieceIntersects.length > 0 && !selectedPieceId) {
-        const mesh = pieceIntersects[0].object;
-        // Find the parent mesh with userData
-        let target = mesh;
-        while (target && !target.userData.pieceId) {
-          target = target.parent;
-        }
-        if (target && target.userData.pieceId) {
-          const piece = pieces[target.userData.pieceId];
-          if (piece.owner === currentPlayer && piece.location !== 'reserve') {
-            const { row, col } = piece.location;
-            const stack = board[row][col];
-            if (stack[stack.length - 1] === piece.id) {
-              selectedPieceId = piece.id;
-              setStatusMessage('移動先のセルを選択');
-              playSound('select');
-              renderReserves();
-              return;
-            }
-          }
-        }
-      }
-    });
-
-    // ====== 初期化 ======
+    // ====================================
+    // 初期化
+    // ====================================
     init3D();
     showModeSelection();
   </script>
