@@ -750,6 +750,8 @@
     // ====================================
     let audioContext = null;
     let soundEnabled = true;
+    let bgmPlaying = false;
+    let bgmNodes = [];
 
     function initAudio() {
       if (audioContext) return;
@@ -766,7 +768,143 @@
       if (audioContext && audioContext.state === 'suspended') {
         audioContext.resume();
       }
+      if (!bgmPlaying) {
+        startBGM();
+      }
     }, { once: true });
+
+    // トロン風アンビエントBGM
+    function startBGM() {
+      if (!audioContext || bgmPlaying) return;
+      bgmPlaying = true;
+
+      // メインパッド（低音のドローン）
+      const padOsc1 = audioContext.createOscillator();
+      const padGain1 = audioContext.createGain();
+      const padFilter1 = audioContext.createBiquadFilter();
+      padOsc1.type = 'sine';
+      padOsc1.frequency.value = 55; // A1
+      padFilter1.type = 'lowpass';
+      padFilter1.frequency.value = 200;
+      padGain1.gain.value = 0.08;
+      padOsc1.connect(padFilter1);
+      padFilter1.connect(padGain1);
+      padGain1.connect(audioContext.destination);
+      padOsc1.start();
+      bgmNodes.push({ osc: padOsc1, gain: padGain1 });
+
+      // サブパッド（5度上）
+      const padOsc2 = audioContext.createOscillator();
+      const padGain2 = audioContext.createGain();
+      const padFilter2 = audioContext.createBiquadFilter();
+      padOsc2.type = 'sine';
+      padOsc2.frequency.value = 82.5; // E2
+      padFilter2.type = 'lowpass';
+      padFilter2.frequency.value = 300;
+      padGain2.gain.value = 0.05;
+      padOsc2.connect(padFilter2);
+      padFilter2.connect(padGain2);
+      padGain2.connect(audioContext.destination);
+      padOsc2.start();
+      bgmNodes.push({ osc: padOsc2, gain: padGain2 });
+
+      // 高音シマーエフェクト
+      const shimmerOsc = audioContext.createOscillator();
+      const shimmerGain = audioContext.createGain();
+      const shimmerFilter = audioContext.createBiquadFilter();
+      shimmerOsc.type = 'triangle';
+      shimmerOsc.frequency.value = 880;
+      shimmerFilter.type = 'bandpass';
+      shimmerFilter.frequency.value = 1000;
+      shimmerFilter.Q.value = 5;
+      shimmerGain.gain.value = 0.02;
+      shimmerOsc.connect(shimmerFilter);
+      shimmerFilter.connect(shimmerGain);
+      shimmerGain.connect(audioContext.destination);
+      shimmerOsc.start();
+      bgmNodes.push({ osc: shimmerOsc, gain: shimmerGain });
+
+      // LFOでシマーを揺らす
+      const lfo = audioContext.createOscillator();
+      const lfoGain = audioContext.createGain();
+      lfo.type = 'sine';
+      lfo.frequency.value = 0.2;
+      lfoGain.gain.value = 200;
+      lfo.connect(lfoGain);
+      lfoGain.connect(shimmerOsc.frequency);
+      lfo.start();
+      bgmNodes.push({ osc: lfo, gain: lfoGain });
+
+      // パルスアルペジオ
+      startArpeggio();
+    }
+
+    let arpInterval = null;
+    function startArpeggio() {
+      if (!audioContext) return;
+      const notes = [220, 330, 440, 550, 440, 330]; // Am風
+      let noteIndex = 0;
+
+      arpInterval = setInterval(() => {
+        if (!audioContext || !bgmPlaying) {
+          clearInterval(arpInterval);
+          return;
+        }
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        const filter = audioContext.createBiquadFilter();
+
+        osc.type = 'sine';
+        osc.frequency.value = notes[noteIndex];
+        filter.type = 'lowpass';
+        filter.frequency.value = 1500;
+
+        const now = audioContext.currentTime;
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(0.03, now + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioContext.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.9);
+
+        noteIndex = (noteIndex + 1) % notes.length;
+      }, 800);
+    }
+
+    function stopBGM() {
+      bgmPlaying = false;
+      bgmNodes.forEach(node => {
+        try {
+          node.gain.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.5);
+          setTimeout(() => {
+            try { node.osc.stop(); } catch(e) {}
+          }, 600);
+        } catch(e) {}
+      });
+      bgmNodes = [];
+      if (arpInterval) {
+        clearInterval(arpInterval);
+        arpInterval = null;
+      }
+    }
+
+    let bgmBaseVolumes = [];
+    function setBGMVolume(level) {
+      // level: 'menu' = 通常, 'game' = 小さめ
+      const multiplier = level === 'menu' ? 1 : 0.3;
+      bgmNodes.forEach((node, i) => {
+        try {
+          if (bgmBaseVolumes[i] === undefined) {
+            bgmBaseVolumes[i] = node.gain.gain.value;
+          }
+          node.gain.gain.linearRampToValueAtTime(bgmBaseVolumes[i] * multiplier, audioContext.currentTime + 0.5);
+        } catch(e) {}
+      });
+    }
 
     function playSound(type) {
       if (!audioContext || !soundEnabled) return;
@@ -1577,6 +1715,7 @@
     function startGame() {
       newGame();
       playSound('start');
+      setBGMVolume('game'); // ゲーム中はBGM音量を下げる
     }
 
     function showModeSelection() {
@@ -1588,6 +1727,8 @@
       document.getElementById('mode-modal').classList.remove('hidden');
       document.getElementById('level-modal').classList.add('hidden');
       document.getElementById('howto-modal').classList.add('hidden');
+      // メニュー画面ではBGM音量を戻す
+      setBGMVolume('menu');
     }
 
     function showHowToPlay() {
