@@ -835,13 +835,10 @@
 
     /* タッチデバイス最適化 */
     @media (hover: none) and (pointer: coarse) {
-      .reserve-piece {
-        min-width: 44px;
-        min-height: 44px;
-      }
-
+      /* コマはサイズ差を維持するためmin-width/heightを設定しない */
+      /* 代わりにタップ領域を::beforeで拡大 */
       .reserve-piece::before {
-        inset: -6px;
+        inset: -8px;
       }
 
       .btn {
