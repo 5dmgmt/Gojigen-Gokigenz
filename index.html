@@ -527,6 +527,16 @@
       opacity: 0.8;
     }
 
+    .victory-btn {
+      margin-top: 40px;
+      animation: victoryBtnPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes victoryBtnPulse {
+      0%, 100% { box-shadow: 0 0 15px rgba(0, 234, 255, 0.5), 0 0 30px rgba(0, 234, 255, 0.3); }
+      50% { box-shadow: 0 0 25px rgba(0, 234, 255, 0.8), 0 0 50px rgba(0, 234, 255, 0.5); }
+    }
+
     /* AI思考中インジケーター */
     .thinking-indicator {
       position: absolute;
@@ -633,6 +643,7 @@
     <div class="victory-overlay" id="victory-overlay">
       <div class="victory-text" id="victory-text"></div>
       <div class="victory-sub" id="victory-sub"></div>
+      <button class="btn victory-btn" id="victory-new-game">New Game</button>
     </div>
   </div>
 
@@ -734,6 +745,169 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
+    // ====== TRON風サウンドエンジン ======
+    let audioContext = null;
+    let soundEnabled = true;
+
+    function initAudio() {
+      if (audioContext) return;
+      try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      } catch (e) {
+        console.log('Web Audio API not supported');
+        soundEnabled = false;
+      }
+    }
+
+    // クリック時にオーディオを初期化（ユーザー操作が必要）
+    document.addEventListener('click', () => {
+      if (!audioContext) initAudio();
+      if (audioContext && audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+    }, { once: true });
+
+    // TRON風シンセサウンド生成
+    function playSound(type) {
+      if (!audioContext || !soundEnabled) return;
+
+      const now = audioContext.currentTime;
+
+      switch (type) {
+        case 'select': // 駒選択時 - 高音のピッ
+          playSynthTone(880, 0.08, 'sine', 0.3, 0.02);
+          playSynthTone(1320, 0.06, 'sine', 0.2, 0.04);
+          break;
+
+        case 'place': // 駒配置時 - 重厚な着地音
+          playSynthTone(220, 0.15, 'triangle', 0.4, 0);
+          playSynthTone(110, 0.2, 'sawtooth', 0.2, 0.05);
+          playNoise(0.1, 0.15);
+          break;
+
+        case 'move': // 駒移動時 - スウィープ音
+          playSweep(400, 800, 0.3, 'sine', 0.25);
+          break;
+
+        case 'gobble': // かぶせ時 - 攻撃的な音
+          playSynthTone(150, 0.1, 'sawtooth', 0.4, 0);
+          playSynthTone(300, 0.15, 'square', 0.3, 0.05);
+          playSynthTone(100, 0.2, 'triangle', 0.3, 0.1);
+          playNoise(0.15, 0.1);
+          break;
+
+        case 'error': // エラー時 - 不協和音
+          playSynthTone(200, 0.15, 'sawtooth', 0.3, 0);
+          playSynthTone(210, 0.15, 'sawtooth', 0.3, 0.02);
+          break;
+
+        case 'win': // 勝利時 - ファンファーレ
+          playSynthTone(523, 0.2, 'sine', 0.4, 0);
+          playSynthTone(659, 0.2, 'sine', 0.4, 0.15);
+          playSynthTone(784, 0.2, 'sine', 0.4, 0.3);
+          playSynthTone(1047, 0.4, 'sine', 0.5, 0.45);
+          playSweep(200, 1200, 0.8, 'sine', 0.15);
+          break;
+
+        case 'turn': // ターン切替 - 軽い電子音
+          playSynthTone(660, 0.05, 'sine', 0.2, 0);
+          playSynthTone(880, 0.05, 'sine', 0.15, 0.03);
+          break;
+
+        case 'start': // ゲーム開始 - 起動音
+          playSweep(100, 600, 0.4, 'sawtooth', 0.3);
+          playSynthTone(440, 0.15, 'sine', 0.3, 0.2);
+          playSynthTone(550, 0.15, 'sine', 0.3, 0.3);
+          playSynthTone(660, 0.2, 'sine', 0.35, 0.4);
+          break;
+
+        case 'hover': // ホバー時 - 微かなビープ
+          playSynthTone(1200, 0.03, 'sine', 0.1, 0);
+          break;
+      }
+    }
+
+    function playSynthTone(freq, duration, waveform, volume, delay) {
+      if (!audioContext) return;
+
+      const osc = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      const filter = audioContext.createBiquadFilter();
+
+      osc.type = waveform;
+      osc.frequency.value = freq;
+
+      filter.type = 'lowpass';
+      filter.frequency.value = 3000;
+      filter.Q.value = 1;
+
+      const now = audioContext.currentTime + delay;
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(volume * 0.3, now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(audioContext.destination);
+
+      osc.start(now);
+      osc.stop(now + duration + 0.1);
+    }
+
+    function playSweep(startFreq, endFreq, duration, waveform, volume) {
+      if (!audioContext) return;
+
+      const osc = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+
+      osc.type = waveform;
+      const now = audioContext.currentTime;
+      osc.frequency.setValueAtTime(startFreq, now);
+      osc.frequency.exponentialRampToValueAtTime(endFreq, now + duration);
+
+      gain.gain.setValueAtTime(volume * 0.3, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+      osc.connect(gain);
+      gain.connect(audioContext.destination);
+
+      osc.start(now);
+      osc.stop(now + duration + 0.1);
+    }
+
+    function playNoise(duration, volume) {
+      if (!audioContext) return;
+
+      const bufferSize = audioContext.sampleRate * duration;
+      const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+      const data = buffer.getChannelData(0);
+
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * 0.5;
+      }
+
+      const noise = audioContext.createBufferSource();
+      noise.buffer = buffer;
+
+      const gain = audioContext.createGain();
+      const filter = audioContext.createBiquadFilter();
+
+      filter.type = 'bandpass';
+      filter.frequency.value = 1000;
+      filter.Q.value = 0.5;
+
+      const now = audioContext.currentTime;
+      gain.gain.setValueAtTime(volume * 0.2, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(audioContext.destination);
+
+      noise.start(now);
+      noise.stop(now + duration);
+    }
+
     // ====== Three.js 3D Setup ======
     let scene, camera, renderer, controls;
     let boardGroup, cellMeshes = [], pieceMeshes = {};
@@ -1138,8 +1312,10 @@
           const mesh = pieceMeshes[topId];
           if (mesh) {
             const startTime = Date.now();
+            const currentWinningLine = winningLine; // キャプチャ
             function pulse() {
-              if (gameOver) {
+              // winningLineが変わったら停止
+              if (gameOver && winningLine === currentWinningLine && pieceMeshes[topId]) {
                 const elapsed = Date.now() - startTime;
                 const scale = 1 + Math.sin(elapsed / 200) * 0.1;
                 mesh.scale.setScalar(scale);
@@ -1413,6 +1589,7 @@
       const piece = pieces[pieceId];
       if (piece.owner !== currentPlayer) {
         flashError('相手の駒は選択できません');
+        playSound('error');
         return;
       }
 
@@ -1422,6 +1599,7 @@
       } else {
         selectedPieceId = pieceId;
         setStatusMessage('ボード上のセルをクリックして配置');
+        playSound('select');
       }
 
       renderReserves();
@@ -1439,20 +1617,24 @@
           if (topPiece.owner === currentPlayer) {
             selectedPieceId = topId;
             setStatusMessage('移動先のセルを選択');
+            playSound('select');
             renderReserves();
             return;
           } else {
             flashError('相手の駒は選択できません');
+            playSound('error');
             return;
           }
         }
         flashError('まず駒を選択してください');
+        playSound('error');
         return;
       }
 
       const piece = pieces[selectedPieceId];
       if (piece.owner !== currentPlayer) {
         flashError('相手の駒は動かせません');
+        playSound('error');
         selectedPieceId = null;
         renderReserves();
         return;
@@ -1461,20 +1643,23 @@
       // Check if can place
       const destStack = board[row][col];
       const topId = destStack.length ? destStack[destStack.length - 1] : null;
+      const isGobble = topId !== null;
 
       if (topId) {
         const topPiece = pieces[topId];
         if (SIZE_RANK[piece.size] <= SIZE_RANK[topPiece.size]) {
           flashError('同サイズ以上の駒の上には置けません');
+          playSound('error');
           return;
         }
       }
 
       // Execute move
       const fromLocation = piece.location;
+      const isMove = fromLocation !== 'reserve';
 
       // Remove from old position
-      if (fromLocation !== 'reserve') {
+      if (isMove) {
         const { row: fromRow, col: fromCol } = fromLocation;
         const fromStack = board[fromRow][fromCol];
         const index = fromStack.indexOf(piece.id);
@@ -1485,6 +1670,15 @@
       } else {
         // Place from reserve
         placePiece3D(piece.id, row, col, true);
+      }
+
+      // Play appropriate sound
+      if (isGobble) {
+        playSound('gobble');
+      } else if (isMove) {
+        playSound('move');
+      } else {
+        playSound('place');
       }
 
       // Add to new position
@@ -1501,10 +1695,12 @@
         winner = winOwner;
         gameOver = true;
         highlightWinningLine3D(winningLine, winOwner);
+        playSound('win');
         setTimeout(() => showVictory(winOwner), 800);
       } else {
         currentPlayer = currentPlayer === 'P1' ? 'P2' : 'P1';
         setStatusMessage('');
+        playSound('turn');
       }
 
       updateStatusBar();
@@ -1573,12 +1769,21 @@
 
     function startGame() {
       newGame();
+      playSound('start');
       if (gameMode === 'CPU' && currentPlayer === 'P2') {
         setTimeout(() => aiMove(), 800);
       }
     }
 
     function showModeSelection() {
+      // 勝利オーバーレイを閉じる
+      victoryOverlay.classList.remove('active');
+      // ゲーム状態をリセット
+      gameOver = false;
+      winner = null;
+      winningLine = null;
+      isAIThinking = false;
+      // モーダルを表示
       document.getElementById('mode-modal').classList.remove('hidden');
       document.getElementById('level-modal').classList.add('hidden');
       document.getElementById('howto-modal').classList.add('hidden');
@@ -1999,8 +2204,14 @@
       const piece = pieces[pieceId];
       const fromLocation = piece.location;
 
+      // Check if gobbling
+      const destStack = board[row][col];
+      const topId = destStack.length ? destStack[destStack.length - 1] : null;
+      const isGobble = topId !== null;
+      const isMove = fromLocation !== 'reserve';
+
       // Remove from old position
-      if (fromLocation !== 'reserve') {
+      if (isMove) {
         const { row: fromRow, col: fromCol } = fromLocation;
         const fromStack = board[fromRow][fromCol];
         const index = fromStack.indexOf(pieceId);
@@ -2008,6 +2219,15 @@
         movePiece3D(pieceId, fromRow, fromCol, row, col);
       } else {
         placePiece3D(pieceId, row, col, true);
+      }
+
+      // Play sound
+      if (isGobble) {
+        playSound('gobble');
+      } else if (isMove) {
+        playSound('move');
+      } else {
+        playSound('place');
       }
 
       // Add to new position
@@ -2023,10 +2243,12 @@
         winner = winOwner;
         gameOver = true;
         highlightWinningLine3D(winningLine, winOwner);
+        playSound('win');
         setTimeout(() => showVictory(winOwner), 800);
       } else {
         currentPlayer = 'P1';
         setStatusMessage('');
+        playSound('turn');
       }
 
       updateStatusBar();
@@ -2034,6 +2256,7 @@
 
     // ====== イベント登録 ======
     btnNewGame.addEventListener('click', showModeSelection);
+    document.getElementById('victory-new-game').addEventListener('click', showModeSelection);
 
     // 3Dクリックで盤上の駒も選択可能に
     document.getElementById('game-canvas').addEventListener('click', (event) => {
@@ -2041,9 +2264,9 @@
 
       raycaster.setFromCamera(mouse, camera);
 
-      // Check piece meshes first
+      // Check piece meshes first (recursive: true でネストされたオブジェクトもチェック)
       const pieceMeshArray = Object.values(pieceMeshes).filter(m => m.visible);
-      const pieceIntersects = raycaster.intersectObjects(pieceMeshArray);
+      const pieceIntersects = raycaster.intersectObjects(pieceMeshArray, true);
 
       if (pieceIntersects.length > 0 && !selectedPieceId) {
         const mesh = pieceIntersects[0].object;
@@ -2060,6 +2283,7 @@
             if (stack[stack.length - 1] === piece.id) {
               selectedPieceId = piece.id;
               setStatusMessage('移動先のセルを選択');
+              playSound('select');
               renderReserves();
               return;
             }
