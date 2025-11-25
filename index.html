@@ -773,163 +773,17 @@
       }
     }, { once: true });
 
-    // トロン風エレクトロニックBGM
+    // BGMなし（効果音のみ）
     function startBGM() {
-      if (!audioContext || bgmPlaying) return;
-      bgmPlaying = true;
-
-      // ベースライン（パルシングベース）
-      const bassOsc = audioContext.createOscillator();
-      const bassGain = audioContext.createGain();
-      const bassFilter = audioContext.createBiquadFilter();
-      bassOsc.type = 'sawtooth';
-      bassOsc.frequency.value = 55;
-      bassFilter.type = 'lowpass';
-      bassFilter.frequency.value = 400;
-      bassFilter.Q.value = 2;
-      bassGain.gain.value = 0.06;
-      bassOsc.connect(bassFilter);
-      bassFilter.connect(bassGain);
-      bassGain.connect(audioContext.destination);
-      bassOsc.start();
-      bgmNodes.push({ osc: bassOsc, gain: bassGain });
-
-      // ベースのパルスLFO
-      const bassLfo = audioContext.createOscillator();
-      const bassLfoGain = audioContext.createGain();
-      bassLfo.type = 'square';
-      bassLfo.frequency.value = 2; // 2Hzのパルス
-      bassLfoGain.gain.value = 0.03;
-      bassLfo.connect(bassLfoGain);
-      bassLfoGain.connect(bassGain.gain);
-      bassLfo.start();
-      bgmNodes.push({ osc: bassLfo, gain: bassLfoGain });
-
-      // シンセパッド（明るめのコード）
-      const padFreqs = [220, 277, 330]; // A minor chord
-      padFreqs.forEach((freq, i) => {
-        const osc = audioContext.createOscillator();
-        const gain = audioContext.createGain();
-        const filter = audioContext.createBiquadFilter();
-        osc.type = 'triangle';
-        osc.frequency.value = freq;
-        filter.type = 'lowpass';
-        filter.frequency.value = 800;
-        gain.gain.value = 0.025;
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(audioContext.destination);
-        osc.start();
-        bgmNodes.push({ osc, gain });
-      });
-
-      // ハイハットパルス
-      startHiHatPulse();
-
-      // シーケンサー
-      startSequencer();
-    }
-
-    let hihatInterval = null;
-    function startHiHatPulse() {
-      if (!audioContext) return;
-      hihatInterval = setInterval(() => {
-        if (!audioContext || !bgmPlaying) {
-          clearInterval(hihatInterval);
-          return;
-        }
-        // フィルタードノイズでハイハット
-        const bufferSize = audioContext.sampleRate * 0.05;
-        const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.1));
-        }
-        const noise = audioContext.createBufferSource();
-        noise.buffer = buffer;
-        const filter = audioContext.createBiquadFilter();
-        filter.type = 'highpass';
-        filter.frequency.value = 8000;
-        const gain = audioContext.createGain();
-        gain.gain.value = 0.04;
-        noise.connect(filter);
-        filter.connect(gain);
-        gain.connect(audioContext.destination);
-        noise.start();
-      }, 250); // 16分音符 @ 60BPM
-    }
-
-    let seqInterval = null;
-    function startSequencer() {
-      if (!audioContext) return;
-      // トロン風のシーケンス（8ビートで上昇下降）
-      const sequence = [
-        { freq: 440, dur: 0.1 },
-        { freq: 0, dur: 0.1 },
-        { freq: 550, dur: 0.1 },
-        { freq: 0, dur: 0.1 },
-        { freq: 660, dur: 0.1 },
-        { freq: 0, dur: 0.1 },
-        { freq: 550, dur: 0.1 },
-        { freq: 0, dur: 0.1 },
-      ];
-      let step = 0;
-
-      seqInterval = setInterval(() => {
-        if (!audioContext || !bgmPlaying) {
-          clearInterval(seqInterval);
-          return;
-        }
-        const note = sequence[step];
-        if (note.freq > 0) {
-          const osc = audioContext.createOscillator();
-          const gain = audioContext.createGain();
-          const filter = audioContext.createBiquadFilter();
-          osc.type = 'square';
-          osc.frequency.value = note.freq;
-          filter.type = 'lowpass';
-          filter.frequency.value = 2000;
-          filter.Q.value = 3;
-          const now = audioContext.currentTime;
-          gain.gain.setValueAtTime(0.05, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + note.dur);
-          osc.connect(filter);
-          filter.connect(gain);
-          gain.connect(audioContext.destination);
-          osc.start(now);
-          osc.stop(now + note.dur + 0.05);
-        }
-        step = (step + 1) % sequence.length;
-      }, 125); // 8分音符 @ 120BPM
+      // BGMは無効化
     }
 
     function stopBGM() {
       bgmPlaying = false;
-      bgmNodes.forEach(node => {
-        try {
-          node.gain.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.5);
-          setTimeout(() => {
-            try { node.osc.stop(); } catch(e) {}
-          }, 600);
-        } catch(e) {}
-      });
-      bgmNodes = [];
-      if (hihatInterval) { clearInterval(hihatInterval); hihatInterval = null; }
-      if (seqInterval) { clearInterval(seqInterval); seqInterval = null; }
     }
 
-    let bgmBaseVolumes = [];
     function setBGMVolume(level) {
-      // level: 'menu' = 通常, 'game' = 小さめ
-      const multiplier = level === 'menu' ? 1 : 0.3;
-      bgmNodes.forEach((node, i) => {
-        try {
-          if (bgmBaseVolumes[i] === undefined) {
-            bgmBaseVolumes[i] = node.gain.gain.value;
-          }
-          node.gain.gain.linearRampToValueAtTime(bgmBaseVolumes[i] * multiplier, audioContext.currentTime + 0.5);
-        } catch(e) {}
-      });
+      // BGMなし
     }
 
     function playSound(type) {
@@ -1162,8 +1016,28 @@
       const particleGeom = new THREE.BufferGeometry();
       particleGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
       particleGeom.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+      // 丸いパーティクル用のテクスチャを作成
+      const canvas = document.createElement('canvas');
+      canvas.width = 32;
+      canvas.height = 32;
+      const ctx = canvas.getContext('2d');
+      const gradient = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+      gradient.addColorStop(0, 'rgba(255,255,255,1)');
+      gradient.addColorStop(0.3, 'rgba(255,255,255,0.8)');
+      gradient.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 32, 32);
+      const particleTexture = new THREE.CanvasTexture(canvas);
+
       const particleMat = new THREE.PointsMaterial({
-        size: 0.05, vertexColors: true, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending
+        size: 0.15,
+        map: particleTexture,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.8,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
       });
       particleSystem = new THREE.Points(particleGeom, particleMat);
       scene.add(particleSystem);
@@ -1172,81 +1046,27 @@
     function createPieceMesh(pieceId, owner, size) {
       const sizeMap = { large: 0.7, medium: 0.5, small: 0.35 };
       const radius = sizeMap[size];
-      const height = radius * 1.2;
+      const geom = new THREE.SphereGeometry(radius, 32, 24);
+      geom.scale(1, 0.7, 1);
       const color = owner === 1 ? COLORS.p1 : COLORS.p2;
-
-      // メイングループ
-      const group = new THREE.Group();
-      group.userData = { pieceId, owner, size };
-
-      // 本体：伏せたコップ形状（LatheGeometryで作成）
-      const points = [];
-      const segments = 20;
-      for (let i = 0; i <= segments; i++) {
-        const t = i / segments;
-        // コップを伏せた形：上が丸く（半球）、下に向かって広がる
-        let x, y;
-        if (t < 0.5) {
-          // 上半分：半球形状
-          const angle = t * Math.PI;
-          x = Math.sin(angle) * radius * 0.6;
-          y = height * (0.5 + Math.cos(angle) * 0.3);
-        } else {
-          // 下半分：広がる部分
-          const lowerT = (t - 0.5) * 2;
-          x = radius * (0.6 + lowerT * 0.4);
-          y = height * (0.5 - lowerT * 0.5);
-        }
-        points.push(new THREE.Vector2(x, y));
-      }
-      const bodyGeom = new THREE.LatheGeometry(points, 32);
-      const bodyMat = new THREE.MeshStandardMaterial({
-        color: color,
-        metalness: 0.5,
-        roughness: 0.2,
-        emissive: color,
-        emissiveIntensity: 0.3
+      const mat = new THREE.MeshStandardMaterial({
+        color: color, metalness: 0.4, roughness: 0.3, emissive: color, emissiveIntensity: 0.3
       });
-      const body = new THREE.Mesh(bodyGeom, bodyMat);
-      body.castShadow = true;
-      group.add(body);
-
-      // 頂上のハイライト（丸いドーム）
-      const topGeom = new THREE.SphereGeometry(radius * 0.25, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2);
-      const topMat = new THREE.MeshBasicMaterial({
-        color: 0xffffff,
-        transparent: true,
-        opacity: 0.4
-      });
-      const top = new THREE.Mesh(topGeom, topMat);
-      top.position.y = height * 0.75;
-      group.add(top);
-
-      // 底部のリング（ネオングロー）
-      const ringGeom = new THREE.TorusGeometry(radius, 0.04, 16, 32);
-      const ringMat = new THREE.MeshBasicMaterial({
-        color: color,
-        transparent: true,
-        opacity: 0.7
-      });
+      const mesh = new THREE.Mesh(geom, mat);
+      mesh.castShadow = true;
+      mesh.userData = { pieceId, owner, size };
+      const ringGeom = new THREE.TorusGeometry(radius * 0.9, 0.03, 16, 32);
+      const ringMat = new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 0.6 });
       const ring = new THREE.Mesh(ringGeom, ringMat);
       ring.rotation.x = Math.PI / 2;
-      ring.position.y = 0.02;
-      group.add(ring);
-
-      // 内側のグロー効果
-      const glowGeom = new THREE.CylinderGeometry(radius * 0.3, radius * 0.8, height * 0.8, 16, 1, true);
-      const glowMat = new THREE.MeshBasicMaterial({
-        color: color,
-        transparent: true,
-        opacity: 0.15,
-        side: THREE.BackSide
-      });
-      const glow = new THREE.Mesh(glowGeom, glowMat);
-      glow.position.y = height * 0.4;
-      group.add(glow);
-
-      return group;
+      ring.position.y = -radius * 0.3;
+      mesh.add(ring);
+      const innerGeom = new THREE.SphereGeometry(radius * 0.3, 16, 16);
+      const innerMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.3 });
+      const inner = new THREE.Mesh(innerGeom, innerMat);
+      inner.position.set(-radius * 0.2, radius * 0.2, radius * 0.3);
+      mesh.add(inner);
+      return mesh;
     }
 
     function placePiece3D(pieceId, row, col, animate = true) {
@@ -1377,9 +1197,9 @@
         const stack = gameState.board[r][c];
         if (stack.length > 0) {
           const topId = stack[stack.length - 1];
-          const group = pieceMeshes[topId];
-          if (group) {
-            const startY = group.position.y;
+          const mesh = pieceMeshes[topId];
+          if (mesh) {
+            const startY = mesh.position.y;
             const startTime = Date.now();
             const jumpDelay = index * 150; // 順番にジャンプ
 
@@ -1393,21 +1213,17 @@
               const jumpCycle = jumpElapsed % 1000;
               const jumpProgress = jumpCycle / 1000;
               const jumpHeight = Math.sin(jumpProgress * Math.PI) * 1.5;
-              group.position.y = startY + jumpHeight;
+              mesh.position.y = startY + jumpHeight;
 
               // 回転
-              group.rotation.y = elapsed * 0.003;
+              mesh.rotation.y = elapsed * 0.003;
 
               // パルススケール
               const pulseScale = 1 + Math.sin(elapsed / 150) * 0.15;
-              group.scale.setScalar(pulseScale);
+              mesh.scale.setScalar(pulseScale);
 
-              // グロー強度（グループ内の本体メッシュ）
-              group.children.forEach(child => {
-                if (child.material && child.material.emissiveIntensity !== undefined) {
-                  child.material.emissiveIntensity = 0.5 + Math.sin(elapsed / 100) * 0.3;
-                }
-              });
+              // グロー強度
+              mesh.material.emissiveIntensity = 0.5 + Math.sin(elapsed / 100) * 0.3;
 
               requestAnimationFrame(animateWinningPiece);
             }
@@ -1550,14 +1366,9 @@
         for (let c = 0; c < 3; c++) {
           const stack = gameState.board[r][c];
           stack.forEach((pieceId, index) => {
-            const group = pieceMeshes[pieceId];
-            if (group) {
-              const isTop = index === stack.length - 1;
-              group.children.forEach(child => {
-                if (child.material) {
-                  child.material.opacity = child.material.opacity * (isTop ? 1 : 0.4);
-                }
-              });
+            const mesh = pieceMeshes[pieceId];
+            if (mesh) {
+              mesh.material.opacity = (index === stack.length - 1) ? 1 : 0.3;
             }
           });
         }
