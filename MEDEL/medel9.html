@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>エンパスママ・ライフナビゲーター認定講座 | MEDEL株式会社</title>
+    <meta name="description" content="感性を「資産」に変える。繊細な女性専門・強み発掘＆起業支援。宿曜×エンパスで自宅で堅実に働く「ライフナビゲーター」0期生募集。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* カラーパレットの再定義：より落ち着いた高級感と安心感 */
+            --primary: #B68D40; /* 上品なゴールド */
+            --primary-light: #E8DCC5;
+            --accent: #C45C5C; /* 視線誘導用のくすみレッド */
+            --text-main: #3E3A35; /* 真っ黒ではないチャコールブラウン */
+            --text-sub: #7A7670;
+            --bg-base: #FDFBF7; /* 暖かみのあるオフホワイト */
+            --bg-secondary: #F3EFE8; /* グレージュ */
+            --bg-dark: #2D2A26;
+            --white: #ffffff;
+            --gradient-gold: linear-gradient(135deg, #C6A664 0%, #EBD598 50%, #C6A664 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            line-height: 1.8;
+            color: var(--text-main);
+            background-color: var(--bg-base);
+            font-weight: 400;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Shippori Mincho', serif;
+            line-height: 1.4;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: opacity 0.3s;
+        }
+
+        a:hover {
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        /* ========== コンポーネント ========== */
+        .btn-main {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            background: var(--gradient-gold);
+            background-size: 200% auto;
+            color: var(--white);
+            font-weight: 700;
+            text-align: center;
+            padding: 20px 10px;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(182, 141, 64, 0.3);
+            font-size: 1.1rem;
+            letter-spacing: 0.05em;
+            position: relative;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .btn-main:hover {
+            background-position: right center;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(182, 141, 64, 0.4);
+        }
+
+        .btn-main .sub-text {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: normal;
+            margin-bottom: 2px;
+            opacity: 0.95;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 40px;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            margin-top: -30px;
+            margin-bottom: 50px;
+            letter-spacing: 0.1em;
+        }
+
+        .highlight {
+            background: linear-gradient(transparent 60%, rgba(232, 220, 197, 0.8) 60%);
+            font-weight: 700;
+        }
+
+        /* ========== ヘッダー ========== */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1000px;
+        }
+
+        .logo {
+            font-family: 'Shippori Mincho', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .logo span {
+            font-size: 0.7rem;
+            display: block;
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            color: var(--primary);
+            line-height: 1;
+            margin-top: 2px;
+        }
+
+        .header-cta {
+            background-color: var(--primary);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            display: none; /* モバイルでは非表示 */
+        }
+
+        @media(min-width: 768px) {
+            .header-cta { display: block; }
+        }
+
+        /* ========== ヒーロー ========== */
+        .hero {
+            margin-top: 60px;
+            background: url('https://images.unsplash.com/photo-1507652313519-d4e9174996dd?q=80&w=2070&auto=format&fit=crop') no-repeat center center/cover;
+            position: relative;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255, 253, 247, 0.85); /* 画像を淡く透かす */
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 40px 20px;
+            max-width: 700px;
+        }
+
+        .tag-label {
+            display: inline-block;
+            background-color: var(--text-main);
+            color: var(--white);
+            padding: 5px 15px;
+            font-size: 0.8rem;
+            margin-bottom: 20px;
+            letter-spacing: 0.1em;
+        }
+
+        .hero-catch {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        .hero-title {
+            font-size: 3.2rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            line-height: 1.2;
+            font-weight: 700;
+            text-shadow: 2px 2px 0px var(--white);
+        }
+
+        .hero-lead {
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            color: var(--text-main);
+            line-height: 2;
+        }
+
+        /* ========== 悩み ========== */
+        .problem {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+
+        .problem-box {
+            background-color: var(--bg-secondary);
+            padding: 40px;
+            border-radius: 20px;
+            margin-top: 30px;
+        }
+
+        .check-list {
+            list-style: none;
+        }
+
+        .check-list li {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+        }
+
+        .check-list li::before {
+            content: '✔';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .problem-message {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+
+        /* ========== 提供価値（USP） ========== */
+        .usp {
+            padding: 80px 0;
+            background-color: var(--bg-base);
+            overflow: hidden;
+        }
+
+        .usp-card {
+            background: var(--white);
+            border: 1px solid var(--primary-light);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+            position: relative;
+        }
+
+        .usp-badge {
+            position: absolute;
+            top: -15px;
+            left: 30px;
+            background: var(--primary);
+            color: white;
+            padding: 5px 20px;
+            font-family: 'Shippori Mincho', serif;
+            font-size: 1.1rem;
+        }
+
+        .usp-card h3 {
+            margin-top: 10px;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        /* ITベンチャー要素の強調 */
+        .vision-area {
+            background: var(--bg-dark);
+            color: var(--white);
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .vision-area h3 {
+            color: var(--primary);
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+        }
+
+        .vision-area p {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        /* ========== 3ヶ月ロードマップ ========== */
+        .roadmap {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+
+        .roadmap-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        @media(min-width: 768px) {
+            .roadmap-steps {
+                flex-direction: row;
+                align-items: stretch;
+            }
+        }
+
+        .step-card {
+            flex: 1;
+            background: var(--bg-secondary);
+            padding: 30px 20px;
+            border-radius: 15px;
+            border-top: 5px solid var(--primary);
+            position: relative;
+        }
+
+        .step-num {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .step-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--text-main);
+        }
+
+        .step-card p {
+            font-size: 0.9rem;
+            color: var(--text-sub);
+        }
+
+        .step-arrow-mobile {
+            text-align: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+        
+        @media(min-width: 768px) {
+            .step-arrow-mobile { display: none; }
+        }
+
+        /* ========== お客様の声（シミュレーション） ========== */
+        .voice {
+            padding: 80px 0;
+            background-color: var(--bg-base);
+        }
+
+        .voice-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media(min-width: 768px) {
+            .voice-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .voice-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+        }
+
+        .voice-user {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .user-icon {
+            width: 50px;
+            height: 50px;
+            background-color: #eee;
+            border-radius: 50%;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .user-info h4 {
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+
+        .user-info span {
+            font-size: 0.8rem;
+            color: var(--text-sub);
+        }
+
+        .voice-text {
+            font-size: 0.95rem;
+            font-style: italic;
+        }
+
+        /* ========== 権威性（講師プロフィール） ========== */
+        .profile {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+
+        .profile-box {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            align-items: center;
+        }
+
+        @media(min-width: 768px) {
+            .profile-box {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+        }
+
+        .profile-img {
+            width: 200px;
+            height: 200px;
+            background-color: #ddd; /* 画像プレースホルダー */
+            border-radius: 50%;
+            flex-shrink: 0;
+            background-image: url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1888&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .profile-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .profile-info p {
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        /* ========== CTAセクション ========== */
+        .cta-section {
+            padding: 80px 0;
+            background: linear-gradient(rgba(45, 42, 38, 0.9), rgba(45, 42, 38, 0.9)), url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            text-align: center;
+        }
+
+        .cta-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 40px 20px;
+            border-radius: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .price-area {
+            margin: 30px 0;
+        }
+
+        .price-label {
+            font-size: 1rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .price-old {
+            text-decoration: line-through;
+            color: #aaa;
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .price-new {
+            font-family: 'Shippori Mincho', serif;
+            font-size: 3.5rem;
+            color: var(--primary);
+            font-weight: 700;
+            text-shadow: 0 0 20px rgba(182, 141, 64, 0.5);
+        }
+
+        .price-unit {
+            font-size: 1rem;
+        }
+
+        .limit-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* ========== よくある質問 ========== */
+        .faq {
+            padding: 80px 0;
+            background-color: var(--bg-base);
+        }
+
+        .faq-item {
+            background: var(--white);
+            margin-bottom: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .faq-q {
+            padding: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+            padding-right: 40px;
+        }
+
+        .faq-q::after {
+            content: '+';
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .faq-a {
+            padding: 0 20px 20px 20px;
+            color: var(--text-sub);
+            font-size: 0.95rem;
+        }
+
+        /* ========== フッター ========== */
+        footer {
+            background-color: var(--bg-dark);
+            color: #888;
+            text-align: center;
+            padding: 30px 0;
+            font-size: 0.8rem;
+        }
+
+        /* ========== スマホ用追従CTA ========== */
+        .sticky-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+            z-index: 999;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .sticky-nav .btn-main {
+            margin: 0;
+            padding: 15px;
+            font-size: 1rem;
+            box-shadow: none;
+        }
+
+        @media(min-width: 768px) {
+            .sticky-nav { display: none; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <a href="#" class="logo">MEDEL<span>感性が喜ぶくらしへ</span></a>
+            <a href="#cta" class="header-cta">個別診断を予約する</a>
+        </div>
+    </header>
+
+    <!-- FV: 憧れとメリットを直感的に -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="tag-label">0期生・創業メンバー限定募集</span>
+            <p class="hero-catch">あなたの「繊細さ」は、<br>誰かを救う「最強の資産」になる。</p>
+            <h1 class="hero-title">エンパスママ<br>ライフナビゲーター<br>養成講座</h1>
+            <p class="hero-lead">
+                宿曜占星術 × エンパスの才能で、<br>
+                自宅にいながら「感謝される働き方」へ。<br>
+                アプリ開発ITベンチャーの公認講師になりませんか？
+            </p>
+            <a href="#cta" class="btn-main">
+                <span class="sub-text">まずはあなたの適性をチェック</span>
+                個別診断セッションに申し込む
+            </a>
+        </div>
+    </section>
+
+    <!-- Problem: 共感と現状の言語化 -->
+    <section class="problem">
+        <div class="container">
+            <h2 class="section-title">こんな「違和感」ありませんか？</h2>
+            <span class="section-subtitle">Problem</span>
+            
+            <div class="problem-box">
+                <ul class="check-list">
+                    <li>組織のスピードや競争についていけず、会社員としての働き方に限界を感じている</li>
+                    <li>「HSP」「エンパス」気質で、相手の顔色ばかり伺って疲れてしまう</li>
+                    <li>副業や起業に興味はあるが、「私には特別なスキルがない」と思っている</li>
+                    <li>フワフワしたスピリチュアルではなく、地に足のついた収入源が欲しい</li>
+                </ul>
+                <div class="problem-message">
+                    その悩みは、あなたが弱いからではありません。<br>
+                    <span class="highlight">「あなたの感性を活かす場所」を知らなかっただけです。</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution/USP: 解決策と圧倒的な差別化 -->
+    <section class="usp">
+        <div class="container">
+            <h2 class="section-title">MEDELが選ばれる3つの理由</h2>
+            <span class="section-subtitle">Why MEDEL?</span>
+
+            <div class="usp-card">
+                <span class="usp-badge">Reason 01</span>
+                <h3>「感覚」を「論理」に変えるツールがある</h3>
+                <p>エンパス女性の最大の武器は「共感力」ですが、それだけではビジネスになりません。古来からの叡智「宿曜（しゅくよう）」という最強の分析ツールを使うことで、あなたの感覚を論理的なアドバイスに変換できます。口下手でも、鑑定書という「商品」があるから自信を持って提供できます。</p>
+            </div>
+
+            <div class="usp-card">
+                <span class="usp-badge">Reason 02</span>
+                <h3>コピペでOK「集客・実務キット」完備</h3>
+                <p>繊細な人が最も苦手とする「売り込み」や「デザイン作成」。これらを全てテンプレート化しました。診断結果の文章も、SNSの告知文も、すべて用意されたものを組み合わせるだけ。クリエイティブに悩む時間をゼロにします。</p>
+            </div>
+
+            <!-- ITベンチャーとしての強みを強調 -->
+            <div class="vision-area">
+                <h3>【最大のメリット】<br>私たちは「教室」ではなく「ITベンチャー」です</h3>
+                <p>
+                    現在、宿曜診断プラットフォーム（アプリ）を開発中です。<br>
+                    0期生のあなたは、将来的にこのアプリの<strong>「公認ナビゲーター」</strong>として登録されます。<br>
+                    つまり、自分で必死に集客しなくても、アプリ経由で仕事が舞い込む仕組みを構築しています。<br>
+                    これは「学びへの消費」ではなく、<strong>「将来のポジションへの投資」</strong>です。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap: 成功へのステップ -->
+    <section class="roadmap">
+        <div class="container">
+            <h2 class="section-title">未経験からプロになる3ヶ月</h2>
+            <span class="section-subtitle">Roadmap</span>
+
+            <div class="roadmap-steps">
+                <div class="step-card">
+                    <span class="step-num">1</span>
+                    <h3>自分を整える</h3>
+                    <p>まずは自分自身の取扱説明書を作成。宿曜で自分の特性を知り、風水で環境を整え、ブレないマインドを構築します。</p>
+                </div>
+                <div class="step-arrow-mobile">▼</div>
+                <div class="step-card">
+                    <span class="step-num">2</span>
+                    <h3>スキルを磨く</h3>
+                    <p>人間関係の相関図リーディングや、相手を癒やす傾聴スキルを習得。無料モニターで実践経験を積みます。</p>
+                </div>
+                <div class="step-arrow-mobile">▼</div>
+                <div class="step-card">
+                    <span class="step-num">3</span>
+                    <h3>収益化する</h3>
+                    <p>あなただけの鑑定メニューを作成。コピペ集客術を使って有料モニターを募集し、ファーストキャッシュを得ます。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Voice: 信頼性の担保 -->
+    <section class="voice">
+        <div class="container">
+            <h2 class="section-title">0期生候補の声</h2>
+            <span class="section-subtitle">Voice</span>
+
+            <div class="voice-grid">
+                <div class="voice-card">
+                    <div class="voice-user">
+                        <div class="user-icon">👩</div>
+                        <div class="user-info">
+                            <h4>A.Sさん（30代・事務職）</h4>
+                            <span>HSS型HSP</span>
+                        </div>
+                    </div>
+                    <p class="voice-text">「占いなんてやったことがない私でも、テンプレート通りにやるだけで『なんでそんなに分かるの？』と友人に驚かれました。副業の第一歩として自信がつきました！」</p>
+                </div>
+                <div class="voice-card">
+                    <div class="voice-user">
+                        <div class="user-icon">👩</div>
+                        <div class="user-info">
+                            <h4>M.Kさん（40代・主婦）</h4>
+                            <span>エンパス気質</span>
+                        </div>
+                    </div>
+                    <p class="voice-text">「将来アプリの公認講師になれるという点に惹かれました。ただ学ぶだけでなく、卒業後の道筋が用意されているのが安心です。」</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Profile: 顔が見える安心感 -->
+    <section class="profile">
+        <div class="container">
+            <div class="profile-box">
+                <div class="profile-img"></div>
+                <div class="profile-info">
+                    <h3>MEDEL代表 / 講師</h3>
+                    <p>
+                        かつて私も、人の感情に敏感すぎる気質に悩み、生きづらさを抱えていました。
+                        しかし「宿曜」に出会い、自分の性質を論理的に理解できたことで、人生が劇的に好転しました。
+                    </p>
+                    <p>
+                        MEDEL（愛でる）には、「自分の感性を愛でて、資産に変える」という想いが込められています。
+                        私たちはただのスクールではありません。あなたと一緒に新しいプラットフォームを創るパートナーとしてお迎えしたいと考えています。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA: オファーのハードルを下げる -->
+    <section class="cta-section" id="cta">
+        <div class="container">
+            <div class="cta-box">
+                <span class="limit-badge">毎月10名様限定</span>
+                <h2>エンパス起業・適性診断<br>個別セッション（60分）</h2>
+                
+                <p style="margin-top: 20px; line-height:1.8;">
+                    いきなり高額な講座に申し込む必要はありません。<br>
+                    まずは「あなたの気質」と「ビジネスの適性」を診断し、<br>
+                    「具体的にいくら稼げるか」をシミュレーションしませんか？
+                </p>
+
+                <div class="price-area">
+                    <span class="price-label">通常 10,000円 →</span>
+                    <span class="price-old">10,000円</span>
+                    <span class="price-new">3,300</span><span class="price-unit">円（税込）</span>
+                </div>
+
+                <a href="#" class="btn-main">
+                    <span class="sub-text">強引な勧誘は一切ありません</span>
+                    今すぐ診断枠を確保する
+                </a>
+                
+                <p style="font-size:0.8rem; margin-top:15px; opacity:0.8;">
+                    ※オンライン（Zoom）での実施となります。<br>
+                    ※定員に達し次第、受付を終了します。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ: 最後のひと押し -->
+    <section class="faq">
+        <div class="container">
+            <h2 class="section-title">よくある質問</h2>
+            
+            <div class="faq-item">
+                <div class="faq-q">占いやビジネスの経験が全くありませんが大丈夫ですか？</div>
+                <div class="faq-a">はい、0期生の8割は完全未経験からのスタートです。知識ゼロからでも理解できるカリキュラムと、テンプレートを用意していますのでご安心ください。</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q">診断セッションでは何をしますか？</div>
+                <div class="faq-a">あなたの宿曜タイプを診断し、強みや向いているビジネススタイルをお伝えします。その上で、本講座でどのような成果が出せるか、具体的なロードマップをご提案します。</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q">本当に3,300円以外にかかりませんか？</div>
+                <div class="faq-a">はい、診断セッションは3,300円（税込）のみです。セッション内で本講座のご案内は致しますが、無理な勧誘は一切行いません。</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 MEDEL Inc. All Rights Reserved.</p>
+            <p style="margin-top:10px; font-size:0.7rem;">特定商取引法に基づく表記 | プライバシーポリシー</p>
+        </div>
+    </footer>
+
+    <div class="sticky-nav">
+        <a href="#cta" class="btn-main">3,300円で適性診断を受ける</a>
+    </div>
+
+</body>
+</html>

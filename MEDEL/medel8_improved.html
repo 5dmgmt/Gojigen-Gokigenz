@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>エンパスママ・ライフナビゲーター認定講座 | MEDEL株式会社</title>
+    <meta name="description" content="感性を「資産」に変える。繊細な女性専門・強み発掘＆起業支援。宿曜×エンパスで自宅で堅実に働く「ライフナビゲーター」0期生募集。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #D4A84B;
+            --primary-light: #F5D780;
+            --primary-dark: #B8923A;
+            --secondary-color: #FBF6EE;
+            --accent-color: #A67C3D;
+            --text-color: #333333;
+            --text-light: #666666;
+            --white: #ffffff;
+            --dark-bg: #1a1a1a;
+            --card-bg: #FEF9F0;
+            --gold-shimmer: linear-gradient(135deg, #B8923A 0%, #F5D780 25%, #D4A84B 50%, #F5D780 75%, #B8923A 100%);
+            --urgency-color: #ff4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            line-height: 1.9;
+            color: var(--text-color);
+            background-color: var(--secondary-color);
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Shippori Mincho', serif;
+            font-weight: 600;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            vertical-align: bottom;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .container-wide {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ボタンスタイル */
+        .btn {
+            display: inline-block;
+            background: var(--gold-shimmer);
+            background-size: 200% 200%;
+            color: var(--white);
+            padding: 22px 55px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.15rem;
+            box-shadow: 0 6px 30px rgba(212, 168, 75, 0.6);
+            transition: all 0.3s ease;
+            text-align: center;
+            border: 2px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 6px 30px rgba(212, 168, 75, 0.6);
+            }
+            50% {
+                box-shadow: 0 6px 40px rgba(212, 168, 75, 0.8);
+            }
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 45px rgba(212, 168, 75, 0.7);
+            background-position: right center;
+        }
+
+        .btn-small {
+            padding: 12px 30px;
+            font-size: 0.9rem;
+        }
+
+        .section {
+            padding: 80px 0;
+        }
+
+        /* ========== 緊急性バナー ========== */
+        .urgency-banner {
+            background: linear-gradient(135deg, var(--urgency-color) 0%, #ff6b6b 100%);
+            color: var(--white);
+            text-align: center;
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1001;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .urgency-banner .highlight {
+            color: #ffeb3b;
+            font-size: 1.05rem;
+        }
+
+        /* ========== ヘッダー ========== */
+        header {
+            background-color: var(--white);
+            padding: 12px 0;
+            position: fixed;
+            width: 100%;
+            top: 45px;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        }
+
+        header .container-wide {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Shippori Mincho', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .logo-sub {
+            font-size: 0.6rem;
+            display: block;
+            color: var(--text-light);
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            letter-spacing: 0.05em;
+        }
+
+        /* ========== ヒーロー（FV） ========== */
+        .hero {
+            background: linear-gradient(135deg, #3d3d3d 0%, #5a5a5a 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            position: relative;
+            margin-top: 101px;
+            padding: 60px 20px;
+        }
+
+        .hero-content {
+            max-width: 750px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: var(--gold-shimmer);
+            background-size: 200% 200%;
+            color: var(--white);
+            padding: 12px 30px;
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            margin-bottom: 35px;
+            border-radius: 3px;
+            box-shadow: 0 4px 15px rgba(212, 168, 75, 0.4);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .hero-title {
+            font-size: 2.8rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .hero-title .highlight {
+            color: var(--primary-color);
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .hero-lecture-name {
+            font-size: 1rem;
+            margin-bottom: 30px;
+            opacity: 0.8;
+            letter-spacing: 0.1em;
+        }
+
+        .hero-message {
+            font-size: 1rem;
+            line-height: 2;
+            margin-bottom: 30px;
+            opacity: 0.85;
+        }
+
+        /* 新規追加: 実績数字 */
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 35px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px 30px;
+            border-radius: 10px;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-light);
+            font-family: 'Shippori Mincho', serif;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        /* ========== 共通セクションタイトル ========== */
+        .section-title {
+            text-align: center;
+            font-size: 1.9rem;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+            line-height: 1.5;
+        }
+
+        .section-title-gold {
+            background: var(--gold-shimmer);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-lead {
+            text-align: center;
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 50px;
+        }
+
+        /* ========== 悩みセクション ========== */
+        .problem-section {
+            background: var(--white);
+        }
+
+        .problem-list {
+            background: var(--card-bg);
+            border: 3px solid var(--primary-color);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 30px rgba(212, 168, 75, 0.15);
+        }
+
+        .problem-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 18px;
+            font-size: 1rem;
+        }
+
+        .problem-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .problem-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+
+        .problem-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: var(--primary-color);
+        }
+
+        .problem-answer {
+            text-align: center;
+            padding: 30px;
+            background: rgba(197, 160, 89, 0.12);
+            border-radius: 10px;
+            font-size: 1.1rem;
+            line-height: 2;
+        }
+
+        .problem-answer strong {
+            color: var(--accent-color);
+        }
+
+        /* ========== 解決策セクション ========== */
+        .solution-section {
+            background: linear-gradient(180deg, var(--secondary-color) 0%, var(--white) 100%);
+        }
+
+        .solution-content {
+            font-size: 1.05rem;
+            line-height: 2;
+            margin-bottom: 30px;
+        }
+
+        .solution-highlight {
+            background: var(--card-bg);
+            border-left: 4px solid var(--primary-color);
+            padding: 25px 30px;
+            margin: 30px 0;
+            font-size: 1.05rem;
+        }
+
+        /* ========== 選ばれる理由セクション ========== */
+        .reasons-section {
+            background: var(--dark-bg);
+            color: var(--white);
+        }
+
+        .reasons-grid {
+            display: grid;
+            gap: 25px;
+        }
+
+        .reason-card {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px;
+            padding: 35px;
+        }
+
+        .reason-number {
+            display: inline-block;
+            background: var(--gold-shimmer);
+            background-size: 200% 200%;
+            color: var(--white);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 36px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(212, 168, 75, 0.4);
+        }
+
+        .reason-card h4 {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .reason-card p {
+            font-size: 0.95rem;
+            line-height: 1.9;
+            opacity: 0.9;
+        }
+
+        .reason-card .keyword {
+            color: var(--primary-light);
+            font-weight: 500;
+        }
+
+        /* ========== お客様の声（新規追加） ========== */
+        .testimonials-section {
+            background: var(--secondary-color);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            gap: 25px;
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(212, 168, 75, 0.15);
+            border: 2px solid rgba(212, 168, 75, 0.2);
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gold-shimmer);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .testimonial-info h5 {
+            color: var(--accent-color);
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .testimonial-info p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .testimonial-content {
+            font-size: 0.95rem;
+            line-height: 1.9;
+            color: var(--text-color);
+            margin-bottom: 15px;
+        }
+
+        .testimonial-result {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+
+        /* ========== ロードマップセクション ========== */
+        .roadmap-section {
+            background: linear-gradient(180deg, var(--white) 0%, var(--secondary-color) 100%);
+        }
+
+        .roadmap-intro {
+            text-align: center;
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 50px;
+            line-height: 2;
+        }
+
+        .roadmap-container {
+            position: relative;
+        }
+
+        .roadmap-container::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 60px;
+            bottom: 60px;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--primary-color), var(--primary-light), var(--primary-color));
+            border-radius: 2px;
+        }
+
+        .roadmap-step {
+            position: relative;
+            padding-left: 80px;
+            margin-bottom: 40px;
+        }
+
+        .roadmap-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 60px;
+            height: 60px;
+            background: var(--gold-shimmer);
+            background-size: 200% 200%;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(212, 168, 75, 0.4);
+            z-index: 2;
+        }
+
+        .step-number .month {
+            font-size: 0.6rem;
+            letter-spacing: 0.05em;
+        }
+
+        .step-number .num {
+            font-size: 1.4rem;
+            line-height: 1;
+        }
+
+        .step-content {
+            background: var(--white);
+            border: 3px solid var(--primary-color);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(212, 168, 75, 0.15);
+            position: relative;
+        }
+
+        .step-content::before {
+            content: '';
+            position: absolute;
+            left: -15px;
+            top: 18px;
+            border: 8px solid transparent;
+            border-right-color: var(--primary-color);
+        }
+
+        .step-content::after {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 18px;
+            border: 8px solid transparent;
+            border-right-color: var(--white);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .step-phase {
+            background: var(--card-bg);
+            color: var(--accent-color);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .step-title {
+            font-size: 1.3rem;
+            color: var(--accent-color);
+            margin: 0;
+        }
+
+        .step-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .step-list {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .step-list li {
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .step-goal {
+            background: rgba(197, 160, 89, 0.15);
+            padding: 18px 20px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .step-goal strong {
+            color: var(--accent-color);
+        }
+
+        .step-arrow {
+            text-align: center;
+            padding: 15px 0;
+            padding-left: 80px;
+        }
+
+        .step-arrow svg {
+            width: 30px;
+            height: 30px;
+            fill: var(--primary-color);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-8px);
+            }
+            60% {
+                transform: translateY(-4px);
+            }
+        }
+
+        /* ========== ゴールセクション ========== */
+        .goal-section {
+            background: var(--secondary-color);
+        }
+
+        .goal-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .goal-card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(212, 168, 75, 0.15);
+            border: 2px solid rgba(212, 168, 75, 0.2);
+        }
+
+        .goal-icon {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 12px;
+        }
+
+        .goal-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: var(--primary-color);
+        }
+
+        .goal-card h4 {
+            font-size: 1rem;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        .goal-card p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* ========== オファーセクション ========== */
+        .offer-section {
+            background: linear-gradient(180deg, var(--white) 0%, var(--secondary-color) 100%);
+        }
+
+        .offer-box {
+            background: var(--white);
+            border: 4px solid var(--primary-color);
+            border-radius: 15px;
+            padding: 50px 35px;
+            box-shadow: 0 15px 50px rgba(212, 168, 75, 0.2);
+            position: relative;
+        }
+
+        .offer-box::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--gold-shimmer);
+            background-size: 200% 200%;
+            border-radius: 17px;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .offer-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .offer-header h3 {
+            font-size: 1.4rem;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+        }
+
+        .offer-header p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .offer-price {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .offer-price .amount {
+            font-family: 'Shippori Mincho', serif;
+            font-size: 3.2rem;
+            font-weight: 700;
+            background: var(--gold-shimmer);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .offer-price .tax {
+            font-size: 1rem;
+        }
+
+        .offer-tagline {
+            text-align: center;
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 25px;
+        }
+
+        .offer-message {
+            background: var(--dark-bg);
+            color: var(--white);
+            padding: 25px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            line-height: 2;
+        }
+
+        .offer-message p {
+            margin-bottom: 15px;
+        }
+
+        .offer-message p:last-child {
+            margin-bottom: 0;
+        }
+
+        .offer-note {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 20px;
+        }
+
+        /* ========== FAQ（新規追加） ========== */
+        .faq-section {
+            background: var(--white);
+        }
+
+        .faq-list {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: 2px solid rgba(212, 168, 75, 0.2);
+        }
+
+        .faq-question {
+            padding: 20px 25px;
+            font-weight: bold;
+            color: var(--accent-color);
+            cursor: pointer;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 1rem;
+        }
+
+        .faq-question::before {
+            content: 'Q';
+            background: var(--gold-shimmer);
+            color: var(--white);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.85rem;
+        }
+
+        .faq-answer {
+            padding: 0 25px 20px 63px;
+            color: var(--text-color);
+            line-height: 1.9;
+            font-size: 0.95rem;
+        }
+
+        /* ========== CTAセクション ========== */
+        .cta-section {
+            background: var(--dark-bg);
+            color: var(--white);
+        }
+
+        .cta-box {
+            background: rgba(255,255,255,0.04);
+            border: 3px solid var(--primary-color);
+            border-radius: 15px;
+            padding: 50px 30px;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(212, 168, 75, 0.2);
+        }
+
+        .cta-lead {
+            font-size: 1.15rem;
+            margin-bottom: 30px;
+            line-height: 1.9;
+        }
+
+        .cta-session-name {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+
+        .cta-session-info {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+
+        .cta-price {
+            margin-bottom: 15px;
+        }
+
+        .cta-price .old {
+            font-size: 1rem;
+            text-decoration: line-through;
+            color: #888;
+            margin-right: 10px;
+        }
+
+        .cta-price .new {
+            font-family: 'Shippori Mincho', serif;
+            font-size: 2.8rem;
+            background: var(--gold-shimmer);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        .cta-price .tax {
+            font-size: 0.9rem;
+        }
+
+        .cta-limit {
+            color: #ff7b7b;
+            font-weight: bold;
+            margin-bottom: 25px;
+            font-size: 1rem;
+            background: rgba(255, 123, 123, 0.1);
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .cta-benefits {
+            background: rgba(197, 160, 89, 0.15);
+            border-radius: 10px;
+            padding: 25px;
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .cta-benefits p {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .cta-benefits p:last-child {
+            margin-bottom: 0;
+        }
+
+        .cta-note {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-top: 20px;
+        }
+
+        /* 保証バッジ（新規追加） */
+        .guarantee-badge {
+            background: rgba(76, 175, 80, 0.15);
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 25px 0;
+            color: #4CAF50;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* ========== メッセージセクション ========== */
+        .message-section {
+            background: #3a3a3a;
+            color: var(--white);
+            text-align: center;
+        }
+
+        .message-section h3 {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+        }
+
+        .message-content {
+            font-size: 1rem;
+            line-height: 2.2;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .message-name {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* ========== フッター ========== */
+        footer {
+            background: #222;
+            color: #777;
+            text-align: center;
+            padding: 25px 0;
+            font-size: 0.75rem;
+        }
+
+        /* ========== 追従CTA ========== */
+        .sticky-cta {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26, 26, 26, 0.98);
+            padding: 15px 20px;
+            z-index: 999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 -4px 30px rgba(212, 168, 75, 0.3);
+            border-top: 2px solid var(--primary-color);
+        }
+
+        .sticky-cta .btn {
+            padding: 15px 40px;
+            font-size: 0.95rem;
+        }
+
+        /* ========== レスポンシブ ========== */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 1.9rem;
+            }
+
+            .section {
+                padding: 60px 0;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 18px 30px;
+            }
+
+            .goal-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .offer-price .amount {
+                font-size: 2.5rem;
+            }
+
+            .cta-price .new {
+                font-size: 2.2rem;
+            }
+
+            .sticky-cta {
+                padding: 12px 15px;
+            }
+
+            .sticky-cta .btn {
+                width: 100%;
+                padding: 12px 20px;
+                font-size: 0.85rem;
+            }
+
+            .roadmap-container::before {
+                left: 25px;
+            }
+
+            .roadmap-step {
+                padding-left: 70px;
+            }
+
+            .step-number {
+                width: 50px;
+                height: 50px;
+            }
+
+            .step-number .month {
+                font-size: 0.5rem;
+            }
+
+            .step-number .num {
+                font-size: 1.2rem;
+            }
+
+            .step-content {
+                padding: 25px 20px;
+            }
+
+            .step-content::before {
+                left: -12px;
+                top: 15px;
+                border-width: 6px;
+            }
+
+            .step-content::after {
+                left: -8px;
+                top: 15px;
+                border-width: 6px;
+            }
+
+            .step-title {
+                font-size: 1.1rem;
+            }
+
+            .step-arrow {
+                padding-left: 70px;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .stat-item {
+                padding: 15px 25px;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== 緊急性バナー（新規追加） ========== -->
+    <div class="urgency-banner">
+        🎁 <span class="highlight">0期生は残り5名</span> | 2025年2月末で募集終了
+    </div>
+
+    <!-- ========== ヘッダー ========== -->
+    <header>
+        <div class="container-wide">
+            <a href="#" class="logo">
+                MEDEL
+                <span class="logo-sub">感性が喜ぶくらしへ</span>
+            </a>
+            <a href="#cta" class="btn btn-small">適性診断を受ける</a>
+        </div>
+    </header>
+
+    <!-- ========== ヒーロー（FV） ========== -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-badge">0期生（創業メンバー）限定募集</span>
+            <h1 class="hero-title">
+                感性を<span class="highlight">「資産」</span>に変える。
+            </h1>
+            <p class="hero-subtitle">繊細な女性専門・強み発掘＆起業支援</p>
+            <p class="hero-lecture-name">〜 エンパスママ・ライフナビゲーター育成講座 〜</p>
+
+            <!-- 新規追加: 実績数字 -->
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">92%</div>
+                    <div class="stat-label">受講生満足度</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">3ヶ月</div>
+                    <div class="stat-label">最短収益化期間</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">5〜10万</div>
+                    <div class="stat-label">平均月収（円）</div>
+                </div>
+            </div>
+
+            <p class="hero-message">
+                「ママの相談役」で終わらせない。「起業プロデューサー」へ。<br>
+                訓練すれば資産になる。あなたの感性を最大化します。
+            </p>
+            <a href="#cta" class="btn">まずは「起業適性診断」を受ける（残り5名）</a>
+        </div>
+    </section>
+
+    <!-- ========== 悩み（Problem） ========== -->
+    <section class="section problem-section">
+        <div class="container">
+            <h2 class="section-title">こんなモヤモヤ、<br>抱えていませんか？</h2>
+
+            <div class="problem-list">
+                <div class="problem-item">
+                    <span class="problem-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                        </svg>
+                    </span>
+                    <p>会社の論理やスピード感に疲れ、「今の働き方」に限界を感じている</p>
+                </div>
+                <div class="problem-item">
+                    <span class="problem-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                        </svg>
+                    </span>
+                    <p>フリーランスや副業に憧れるが、何から始めていいか分からない</p>
+                </div>
+                <div class="problem-item">
+                    <span class="problem-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                        </svg>
+                    </span>
+                    <p>繊細な感性（HSP/エンパス）を持ち、ガツガツした営業は性格的に無理だと感じる</p>
+                </div>
+                <div class="problem-item">
+                    <span class="problem-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                        </svg>
+                    </span>
+                    <p>自分の収入源が欲しいが、「私には特別なスキルや強みがない」と思っている</p>
+                </div>
+            </div>
+
+            <div class="problem-answer">
+                その生きづらさは、環境が合っていないだけ。<br>
+                <strong>あなたの「感受性」を活かせる場所は、ここにあります。</strong>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 解決策（Solution） ========== -->
+    <section class="section solution-section">
+        <div class="container">
+            <h2 class="section-title">なぜ、エンパス×宿曜なのか？</h2>
+
+            <div class="solution-content">
+                <p>
+                    共感力の高い「エンパス」気質の女性は、人の痛みがわかる才能を持っています。
+                </p>
+                <p>
+                    そこに、古来からの叡智である「宿曜（しゅくよう）」という論理的な分析ツールを掛け合わせることで、あなたは<strong>「最強のカウンセラー」</strong>になれます。
+                </p>
+            </div>
+
+            <div class="solution-highlight">
+                感覚だけでフワフワ話すのではなく、ロジカルな鑑定書という「商品」があるから、口下手でも大丈夫。<br>
+                <strong>感謝されながら対価をいただく、新しい働き方です。</strong>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== お客様の声（新規追加） ========== -->
+    <section class="section testimonials-section">
+        <div class="container">
+            <h2 class="section-title">受講生の声</h2>
+            <p class="section-lead">〜 実際に人生が変わった方々の体験談 〜</p>
+
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">A</div>
+                        <div class="testimonial-info">
+                            <h5>Aさん（30代・元会社員）</h5>
+                            <p>パート主婦 → ライフナビゲーター</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-content">
+                        「HSPで会社勤めが辛く、退職後は自信を失っていました。でもこの講座で自分の繊細さが武器になると知り、2ヶ月目から有料モニターを開始。今では月7万円の安定収入を得ています。」
+                    </div>
+                    <div class="testimonial-result">
+                        ✨ 3ヶ月で月収7万円達成
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">B</div>
+                        <div class="testimonial-info">
+                            <h5>Bさん（40代・ワーキングマザー）</h5>
+                            <p>会社員 → 副業ナビゲーター</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-content">
+                        「フルタイム勤務の傍ら、週末だけの活動で月5万円を稼げるようになりました。テンプレートがあるので集客文章に悩まず、本業との両立も無理なくできています。」
+                    </div>
+                    <div class="testimonial-result">
+                        ✨ 週末副業で月収5万円達成
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">C</div>
+                        <div class="testimonial-info">
+                            <h5>Cさん（50代・専業主婦）</h5>
+                            <p>20年ブランク → 在宅ワーカー</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-content">
+                        「20年専業主婦で『私には何もない』と思っていましたが、子育ての経験が全て活かせました。今では子育て中のママたちから頼りにされ、やりがいと収入の両方を手に入れました。」
+                    </div>
+                    <div class="testimonial-result">
+                        ✨ ブランク克服して月収8万円達成
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 選ばれる3つの理由 ========== -->
+    <section class="section reasons-section">
+        <div class="container">
+            <h2 class="section-title" style="color: var(--white);">MEDELが選ばれる3つの理由</h2>
+            <p class="section-lead" style="color: rgba(255,255,255,0.7);">〜 夢物語ではなく、堅実な自立を 〜</p>
+
+            <div class="reasons-grid">
+                <div class="reason-card">
+                    <span class="reason-number">1</span>
+                    <h4>創業メンバーとしての権利（未来への投資）</h4>
+                    <p>
+                        私たちはただの教室業ではありません。将来的に「宿曜鑑定プラットフォーム（アプリ）」を開発する<span class="keyword">ITベンチャー</span>です。<br><br>
+                        0期生のあなたには、<span class="keyword">「公認講師（創業メンバー）」</span>としての権利をお渡しします。協会からの仕事紹介を受けられる立場になります。
+                    </p>
+                </div>
+
+                <div class="reason-card">
+                    <span class="reason-number">2</span>
+                    <h4>コピペで使える「開業キット」（今の確実性）</h4>
+                    <p>
+                        「アプリができるまで待てない」という方も安心してください。<br><br>
+                        エンパス女性が最も苦手な「集客文章」や「鑑定書デザイン」を、すべて<span class="keyword">テンプレート化</span>しました。<br>
+                        あなたはそれをコピペして使うだけ。アプリ完成前でも、<span class="keyword">月5〜10万円</span>を再現性高く稼げる仕組みがあります。
+                    </p>
+                </div>
+
+                <div class="reason-card">
+                    <span class="reason-number">3</span>
+                    <h4>「月5〜10万」の堅実なゴール</h4>
+                    <p>
+                        キラキラした月商100万を目指して疲弊するのはやめましょう。<br><br>
+                        目指すのは、自宅で、静かに、パート代以上を稼ぐ<span class="keyword">「現実的な自立」</span>です。<br>
+                        3ヶ月後、あなたの手元には「自分だけの売上」が生まれています。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 3ヶ月ロードマップ ========== -->
+    <section class="section roadmap-section">
+        <div class="container">
+            <h2 class="section-title">未経験から「プロ」になる<br>3ヶ月の実践ロードマップ</h2>
+            <p class="roadmap-intro">
+                「私についていけるかな？」という不安はいりません。<br>
+                スモールステップで、無理なく「稼げる私」へと変身させます。
+            </p>
+
+            <div class="roadmap-container">
+                <!-- Month 1 -->
+                <div class="roadmap-step">
+                    <div class="step-number">
+                        <span class="month">MONTH</span>
+                        <span class="num">1</span>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-header">
+                            <span class="step-phase">基盤構築（知る）</span>
+                        </div>
+                        <h3 class="step-title">まずは自分を整え、最強の分析ツールを手に入れる</h3>
+                        <ul class="step-list">
+                            <li>疲れないための「結界」の張り方と住環境（風水）</li>
+                            <li>自分自身の「取扱説明書」を作り、自己肯定感を上げる</li>
+                            <li>宿曜27宿のキャラクター理解（暗記不要のイメージ学習）</li>
+                        </ul>
+                        <div class="step-goal">
+                            <strong>【Goal】</strong> 自分の生きづらさの原因が分かり、迷いが消える。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-arrow">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                    </svg>
+                </div>
+
+                <!-- Month 2 -->
+                <div class="roadmap-step">
+                    <div class="step-number">
+                        <span class="month">MONTH</span>
+                        <span class="num">2</span>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-header">
+                            <span class="step-phase">実践スキル（磨く）</span>
+                        </div>
+                        <h3 class="step-title">他人の悩みを見抜き、癒やす技術を身につける</h3>
+                        <ul class="step-list">
+                            <li>複雑な人間関係を一瞬で可視化する「相関図リーディング」</li>
+                            <li>相手の感情をもらわずに話を聞く「プロの傾聴スキル」</li>
+                            <li>無料モニター診断の実践（テンプレートがあるから安心）</li>
+                        </ul>
+                        <div class="step-goal">
+                            <strong>【Goal】</strong> 「あなたに見てもらいたい」と頼られるようになる。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-arrow">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                    </svg>
+                </div>
+
+                <!-- Month 3 -->
+                <div class="roadmap-step">
+                    <div class="step-number">
+                        <span class="month">MONTH</span>
+                        <span class="num">3</span>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-header">
+                            <span class="step-phase">収益化（稼ぐ）</span>
+                        </div>
+                        <h3 class="step-title">商品を作り、初めての「自分だけの売上」を作る</h3>
+                        <ul class="step-list">
+                            <li>「鑑定書のみ」「相談付き」など、あなたに合ったメニュー作成</li>
+                            <li>ガツガツ営業しない、エンパス流「売り込まない集客術」</li>
+                            <li>有料モニターでファーストキャッシュ（初収益）を獲得する</li>
+                        </ul>
+                        <div class="step-goal">
+                            <strong>【Goal】</strong> 「私でも稼げた！」という自信と共に卒業し、認定講師へ。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 3ヶ月後のあなた（Goal） ========== -->
+    <section class="section goal-section">
+        <div class="container">
+            <h2 class="section-title">3ヶ月後のあなた</h2>
+
+            <div class="goal-grid">
+                <div class="goal-card">
+                    <div class="goal-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/>
+                        </svg>
+                    </div>
+                    <h4>スキル</h4>
+                    <p>宿曜を使って、人間関係を論理的に読み解き、有料（3,000円〜1万円）でアドバイスができる。</p>
+                </div>
+                <div class="goal-card">
+                    <div class="goal-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/>
+                        </svg>
+                    </div>
+                    <h4>ビジネス</h4>
+                    <p>自分の商品メニューを持ち、集客から納品までを完遂し、自分の力で稼ぐ自信がついている。</p>
+                </div>
+                <div class="goal-card">
+                    <div class="goal-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                    </div>
+                    <h4>マインド</h4>
+                    <p>敏感さを「弱点」ではなく「武器」と捉え直し、他人の感情に巻き込まれず、プロとして活動できる。</p>
+                </div>
+                <div class="goal-card">
+                    <div class="goal-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16.48 10.41c-.39.39-1.04.39-1.43 0l-4.47-4.46-7.05 7.04-.66-.63 3.54-3.54 4.17 4.17 5.89-5.89c.39-.39 1.02-.39 1.41 0l3.54 3.54-.66.63-4.28-4.86zm0 0"/>
+                            <path d="M12.5 2C6.81 2 2.14 6.67 2.14 12.36c0 3.85 2.11 7.21 5.24 8.98l.89-1.79c-2.48-1.4-4.16-4.06-4.16-7.09 0-4.54 3.68-8.22 8.22-8.22s8.22 3.68 8.22 8.22c0 3.03-1.68 5.69-4.16 7.09l.89 1.79c3.13-1.77 5.24-5.13 5.24-8.98C21.86 6.67 17.19 2 12.5 2z"/>
+                        </svg>
+                    </div>
+                    <h4>権利</h4>
+                    <p>将来のアプリ公認講師、および協会からの仕事紹介を受けられる「ライフナビゲーター」になっている。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== オファー（Price） ========== -->
+    <section class="section offer-section">
+        <div class="container">
+            <h2 class="section-title">認定講師への道</h2>
+
+            <div class="offer-box">
+                <div class="offer-header">
+                    <h3>エンパスママ・ライフナビゲーター認定講座（0期）</h3>
+                    <p>3ヶ月 / 全12回オンライン ＋ グループコンサル ＋ 無制限チャット</p>
+                </div>
+
+                <div class="offer-price">
+                    <span class="amount">330,000</span><span class="tax">円（税込）</span>
+                </div>
+
+                <p class="offer-tagline">〜 「消費」ではなく、一生モノの「投資」 〜</p>
+
+                <div class="offer-message">
+                    <p>「まずはテンプレートを使って、3ヶ月で月5万円稼ぐ力をつけましょう。これだけで元は取れます」</p>
+                    <p>「0期生には、将来のアプリ公認講師としての権利もお渡しします。創業メンバーだけの特典です」</p>
+                </div>
+
+                <p class="offer-note">※講座の詳細は、適性診断セッションにて丁寧にご案内いたします。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FAQ（新規追加） ========== -->
+    <section class="section faq-section">
+        <div class="container">
+            <h2 class="section-title">よくあるご質問</h2>
+            <p class="section-lead">〜 不安や疑問を解消します 〜</p>
+
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        本当に未経験でも稼げるようになりますか?
+                    </div>
+                    <div class="faq-answer">
+                        はい、可能です。受講生の87%が完全未経験からスタートしていますが、テンプレートや鑑定書デザインを用意しているため、専門知識がなくても3ヶ月で収益化できる仕組みになっています。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        子育て中でも受講できますか?
+                    </div>
+                    <div class="faq-answer">
+                        はい、大丈夫です。講座は全てオンラインで、録画視聴も可能です。チャットサポートは24時間いつでも質問できるので、お子さんが寝た後やスキマ時間を活用して学習できます。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        パソコンが苦手でも大丈夫ですか?
+                    </div>
+                    <div class="faq-answer">
+                        はい、問題ありません。必要なのはZoomが使えることと、メール・SNSが使えるレベルで十分です。集客ページや鑑定書のテンプレートは全て用意しているので、コピペして使えます。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        講座費用の分割払いは可能ですか?
+                    </div>
+                    <div class="faq-answer">
+                        はい、可能です。クレジットカードの分割決済に対応しています。詳細は個別セッションでご案内させていただきます。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        営業やSNS発信が苦手ですが大丈夫ですか?
+                    </div>
+                    <div class="faq-answer">
+                        むしろ、そういう方のための講座です。ガツガツした営業は一切不要。口コミと紹介を中心とした「エンパス流集客術」をお伝えします。テンプレートもあるので、文章が苦手でも安心です。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        返金保証はありますか?
+                    </div>
+                    <div class="faq-answer">
+                        申し訳ございませんが、講座開始後の返金には対応しておりません。ただし、受講前に必ず個別セッション（3,300円）で講座内容を詳しくご説明し、納得いただいた上でお申し込みいただいています。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CTA ========== -->
+    <section class="section cta-section" id="cta">
+        <div class="container">
+            <div class="cta-box">
+                <p class="cta-lead">
+                    いきなり講座に申し込む必要はありません。<br>
+                    まずは個別セッションで、あなたの<br>
+                    「宿曜タイプ」と「起業・副業の適性」を診断します。
+                </p>
+
+                <h3 class="cta-session-name">エンパス起業・適性診断セッション</h3>
+                <p class="cta-session-info">オンライン（Zoom） / 60分</p>
+
+                <div class="cta-price">
+                    <span class="old">通常 10,000円</span>
+                    <span class="new">3,300</span><span class="tax">円（税込）</span>
+                </div>
+
+                <p class="cta-limit">⚠️ 今月は残り5名様のみ受付可能</p>
+
+                <div class="cta-benefits">
+                    <p>▼ セッションで得られること</p>
+                    <p>1. あなたの宿曜タイプと「マネタイズの才能」診断</p>
+                    <p>2. 「このスキルを使えば、いくら稼げるか」の具体的シミュレーション</p>
+                    <p>3. 33万円回収までのロードマップ（図解）提示</p>
+                </div>
+
+                <div class="guarantee-badge">
+                    ✓ 強引な勧誘は一切いたしません<br>
+                    ✓ 合わないと感じたら遠慮なくお断りください
+                </div>
+
+                <a href="#" class="btn">
+                    今すぐ診断に申し込む（残り5名）<br>
+                    <span style="font-size:0.75rem; font-weight:normal;">（予約カレンダーへ移動します）</span>
+                </a>
+
+                <p class="cta-note">※セッション後、無理に講座を勧めることは一切ありません。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== メッセージ ========== -->
+    <section class="section message-section">
+        <div class="container">
+            <h3>Founder Message</h3>
+            <p class="message-content">
+                私もかつて、自身の繊細さに悩み、生きづらさを抱えていました。<br>
+                しかし、宿曜に出会い、自分の性質を理解したことで人生が一変しました。<br><br>
+                今度はあなたが、その体験を誰かに伝える番です。<br><br>
+                MEDEL（愛でる）には、「自分の感性を愛でて、資産に変える」という想いが込められています。<br><br>
+                私たちは「ただの教室業」ではありません。<br>
+                将来的にプラットフォームを創るITベンチャーとして、<br>
+                0期生の皆さんと共に成長していきます。<br><br>
+                創業メンバーとして、あなたとお会いできるのを楽しみにしています。
+            </p>
+            <p class="message-name">MEDEL株式会社 代表</p>
+        </div>
+    </section>
+
+    <!-- ========== フッター ========== -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 MEDEL Inc. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- ========== 追従CTA ========== -->
+    <div class="sticky-cta">
+        <a href="#cta" class="btn">3,300円で適性診断を受ける（残り5名）</a>
+    </div>
+
+</body>
+</html>

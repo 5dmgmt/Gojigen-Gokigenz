@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>家族の「心地よさ」を取り戻す｜宿曜家族鑑定</title>
+    <meta name="description" content="夫との関係、子供の性格に悩むママへ。宿曜占星術で家族の「トリセツ」をお届けします。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 
+           【デザインコンセプト】
+           エンパスママに寄り添う「優しさ」「安心感」
+           カラー：サクラベージュ、温かみのあるブラウン、ホワイト
+        */
+        :root {
+            --bg-color: #FFFBF7; /* 生成り色 */
+            --main-color: #E6BDB3; /* くすみピンク */
+            --accent-color: #C48C7C; /* テラコッタ */
+            --text-color: #6D5852; /* 優しいブラウン */
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Zen Maru Gothic', sans-serif; /* 丸ゴシックで優しさを表現 */
+            line-height: 1.8;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            font-size: 16px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            padding: 60px 0;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 1.6rem;
+            margin-bottom: 40px;
+            color: var(--accent-color);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        h2::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 2px;
+            background-color: var(--main-color);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        /* FV (ファーストビュー) */
+        .hero {
+            background-color: var(--white);
+            text-align: center;
+            padding: 80px 20px;
+            background-image: radial-gradient(#FFF0EB 2px, transparent 2px);
+            background-size: 30px 30px;
+        }
+
+        .hero-tag {
+            background-color: var(--text-color);
+            color: var(--white);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 1.8rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .hero p {
+            font-size: 1rem;
+            margin-bottom: 30px;
+        }
+
+        /* お悩み */
+        .worries {
+            background-color: #FFF;
+        }
+
+        .worry-box {
+            background-color: #FAF3F0;
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px dashed var(--main-color);
+        }
+
+        .check-item {
+            margin-bottom: 15px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .check-item::before {
+            content: '✔';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* 解決策 */
+        .solution {
+            text-align: center;
+        }
+
+        .solution-text {
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(230, 189, 179, 0.2);
+        }
+
+        /* メニューカード */
+        .menu-card {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            border: 1px solid #EEE;
+            transition: transform 0.3s;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .menu-header {
+            background-color: #F4EBE7;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .menu-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .menu-price {
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .menu-body {
+            padding: 25px;
+        }
+
+        .menu-recommend {
+            background-color: #FFF8E1; /* 薄い黄色 */
+            border: 2px solid #F4C430;
+            position: relative;
+        }
+
+        .badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #F4C430;
+            color: #FFF;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* プロフィール */
+        .profile {
+            background-color: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: #EEE;
+        }
+
+        /* CTAボタン */
+        .btn {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            margin: 30px auto 0;
+            background-color: var(--accent-color);
+            color: var(--white);
+            text-align: center;
+            padding: 18px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 10px rgba(196, 140, 124, 0.4);
+            transition: opacity 0.3s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-small {
+            max-width: 200px;
+            padding: 10px;
+            font-size: 0.9rem;
+            margin: 10px auto;
+            background-color: #999;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        /* スマホ調整 */
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 1.4rem; }
+            .profile { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ファーストビュー -->
+    <header class="hero">
+        <div class="container">
+            <span class="hero-tag">家族関係に悩むママへ</span>
+            <h1>
+                もう、一人で頑張らなくて大丈夫。<br>
+                家族の「取扱説明書」を手に入れて<br>
+                <span style="color: #C48C7C; border-bottom:3px solid #E6BDB3;">心穏やかな毎日</span>を取り戻しませんか？
+            </h1>
+            <p>
+                性格の不一致だと思っていたその悩み、<br>
+                実は「星の組み合わせ」の違いかもしれません。
+            </p>
+            <a href="#menu" class="btn">鑑定メニューを見る</a>
+        </div>
+    </header>
+
+    <!-- お悩みセクション -->
+    <section class="section worries">
+        <div class="container">
+            <h2>こんなモヤモヤありませんか？</h2>
+            <div class="worry-box">
+                <div class="check-item">夫の話が論理的すぎて、気持ちをわかってくれない</div>
+                <div class="check-item">子供の癇癪（かんしゃく）や敏感さに、どう接していいか分からない</div>
+                <div class="check-item">「私が我慢すればいい」と思ってしまい、いつも疲れている</div>
+                <div class="check-item">家族のために頑張っているのに、なぜか空回りする</div>
+            </div>
+            <p style="text-align: center; margin-top: 30px;">
+                その辛さは、あなたのせいではありません。<br>
+                ただ、お互いの<strong>「心のOS（仕組み）」</strong>が違うだけなんです。
+            </p>
+        </div>
+    </section>
+
+    <!-- 解決策セクション -->
+    <section class="section solution">
+        <div class="container">
+            <h2>「宿曜（しゅくよう）」で紐解く解決策</h2>
+            <div class="solution-text">
+                <p style="margin-bottom: 20px;">
+                    「宿曜占星術」は、空海が日本に持ち帰ったと言われる、歴史ある人間関係の分析ツールです。
+                </p>
+                <p>
+                    「なぜあの人は怒るのか？」「どう言えば伝わるのか？」<br>
+                    これらを論理的に可視化することで、<br>
+                    <strong>「なんだ、宇宙人だと思っていた夫は、こういう性質だったんだ！」</strong><br>
+                    と、驚くほど気持ちが楽になります。
+                </p>
+                <div style="margin-top: 20px;">
+                    <img src="https://placehold.jp/30/E6BDB3/ffffff/?text=Image:Kanteisho_Sample" alt="鑑定書サンプル">
+                    <p style="font-size: 0.8rem; color:#999; margin-top:5px;">※あなただけの「家族のトリセツ」を作成します</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- メニューセクション -->
+    <section class="section menu" id="menu">
+        <div class="container">
+            <h2>ご提供メニュー</h2>
+
+            <!-- 3,000円プラン（梅） -->
+            <div class="menu-card">
+                <div class="menu-header">
+                    <h3 class="menu-title">🌸 宿曜鑑定書（診断レポート）</h3>
+                    <div class="menu-price">3,000円 <span style="font-size:1rem; color:#666; font-weight:normal;">(税込)</span></div>
+                </div>
+                <div class="menu-body">
+                    <p>「まずは理由だけサクッと知りたい」という方に。<br>
+                    あなたとご家族の性質・相性の正体をまとめたPDFレポートをお送りします。</p>
+                    <ul style="margin: 20px 0 20px 20px; font-size: 0.95rem;">
+                        <li>基本性格分析シート</li>
+                        <li>相性の正体・解説レポート</li>
+                        <li>今日から使える「魔法の一言」アドバイス</li>
+                    </ul>
+                    <a href="CHANGE_THIS_LINK" class="btn btn-small">このプランに申し込む</a>
+                </div>
+            </div>
+
+            <!-- 10,000円プラン（竹）★おすすめ -->
+            <div class="menu-card menu-recommend">
+                <div class="badge">人気No.1</div>
+                <div class="menu-header">
+                    <h3 class="menu-title">🎋 60分 お悩み解決セッション</h3>
+                    <div class="menu-price">10,000円 <span style="font-size:1rem; color:#666; font-weight:normal;">(税込)</span></div>
+                </div>
+                <div class="menu-body">
+                    <p><strong>「誰かに話を聞いてほしい！」という方へ。</strong><br>
+                    鑑定書の内容を元に、あなたの具体的なお悩みをZoomでじっくり伺います。</p>
+                    <ul style="margin: 20px 0 20px 20px; font-size: 0.95rem;">
+                        <li><strong>宿曜鑑定書（梅プランの内容すべて）</strong></li>
+                        <li>60分間のオンラインセッション</li>
+                        <li>具体的な解決策・行動プランの作成</li>
+                        <li>特典：セッション後1週間のLINEフォロー</li>
+                    </ul>
+                    <a href="CHANGE_THIS_LINK" class="btn">このプランに申し込む</a>
+                </div>
+            </div>
+
+            <!-- 30,000円プラン（松） -->
+            <div class="menu-card">
+                <div class="menu-header">
+                    <h3 class="menu-title">🌲 3ヶ月 伴走サポート</h3>
+                    <div class="menu-price">30,000円 <span style="font-size:1rem; color:#666; font-weight:normal;">(税込)</span></div>
+                </div>
+                <div class="menu-body">
+                    <p>「自分を変えたい。二度と悩みたくない」という方へ。<br>
+                    3ヶ月間、私があなたのパートナーとして伴走します。</p>
+                    <ul style="margin: 20px 0 20px 20px; font-size: 0.95rem;">
+                        <li>月1回×3回の定期セッション</li>
+                        <li><strong>期間中のLINE相談・無制限</strong></li>
+                        <li>特典：家族全員分の鑑定書作成</li>
+                    </ul>
+                    <a href="CHANGE_THIS_LINK" class="btn btn-small">このプランに申し込む</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- プロフィールセクション -->
+    <section class="section">
+        <div class="container">
+            <div class="profile">
+                <!-- プロフ画像：自分の写真に変更してください -->
+                <img src="https://placehold.jp/30/E6BDB3/ffffff/?text=Photo" alt="講師写真" class="profile-img">
+                <div>
+                    <h3 style="margin-bottom: 10px; color: var(--accent-color);">Navigator Profile</h3>
+                    <p>
+                        <strong><!-- 名前を入れる --> 〇〇 〇〇</strong><br>
+                        MEDEL認定 ライフナビゲーター<br>
+                        <br>
+                        私自身も、繊細な気質（エンパス）で家族関係に悩んでいました。
+                        しかし、宿曜に出会い「自分と相手の違い」を知ることで、劇的に心が楽になりました。
+                        あなたの「心地よい暮らし」を取り戻すお手伝いをさせてください。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Life Navigator. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
