@@ -1,3 +1,20 @@
 .DS_Store
 *.zip
+*.png
+*.jpeg
 AMG/
+
+# ローカル作業メモ・ドキュメント
+FDC-PHASE50-CRM-FORMS-RBAC-BILLING-RUNBOOK.md
+Mac-mini-setup.md
+X投稿-VibeCoding2.0.md
+airis-m-残作業.md
+mensa-openclaw-status.md
+vercel-deploy-fix-report.md
+五次元宿曜士_資格ビジネス設計書.md
+shukuyo-compatibility-data.csv
+
+# スキル・スクリプト（ローカルのみ）
+qiita-auto-writer/
+tech-guide-remotion/
+youtube-skills/
